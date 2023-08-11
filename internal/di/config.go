@@ -2,8 +2,8 @@ package di
 
 import (
 	"github.com/joho/godotenv"
-	"github.com/yonisaka/go-boilerplate/config"
-	"github.com/yonisaka/go-boilerplate/pkg/logger"
+	"github.com/yonisaka/dating-service/config"
+	"github.com/yonisaka/dating-service/pkg/logger"
 )
 
 func GetConfig() *config.Config {

@@ -1,8 +1,8 @@
 package di
 
 import (
-	"github.com/yonisaka/go-boilerplate/internal/entities/repository"
-	"github.com/yonisaka/go-boilerplate/internal/infrastructure/datastore"
+	"github.com/yonisaka/dating-service/internal/entities/repository"
+	"github.com/yonisaka/dating-service/internal/infrastructure/datastore"
 )
 
 // GetBaseRepo returns BaseRepo instance.

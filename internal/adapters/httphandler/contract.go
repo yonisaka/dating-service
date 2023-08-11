@@ -3,7 +3,7 @@ package httphandler
 import (
 	"net/http"
 
-	"github.com/yonisaka/go-boilerplate/internal/dto"
+	"github.com/yonisaka/dating-service/internal/dto"
 )
 
 // Handler is an interface for http handler

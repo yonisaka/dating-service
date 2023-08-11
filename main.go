@@ -1,10 +1,11 @@
 package main
 
 import (
-	"github.com/yonisaka/go-boilerplate/cmd"
-	"github.com/yonisaka/go-boilerplate/internal/di"
 	"log"
 	"os"
+
+	"github.com/yonisaka/dating-service/cmd"
+	"github.com/yonisaka/dating-service/internal/di"
 )
 
 func main() {

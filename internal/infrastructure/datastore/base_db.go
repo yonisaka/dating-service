@@ -8,8 +8,8 @@ import (
 	"sync"
 
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/yonisaka/go-boilerplate/config"
-	"github.com/yonisaka/go-boilerplate/pkg/di"
+	"github.com/yonisaka/dating-service/config"
+	"github.com/yonisaka/dating-service/pkg/di"
 )
 
 var (

@@ -6,7 +6,7 @@ package usecases
 import (
 	"context"
 
-	"github.com/yonisaka/go-boilerplate/internal/entities/repository"
+	"github.com/yonisaka/dating-service/internal/entities/repository"
 )
 
 // HealthUsecase is an interface for health usecase

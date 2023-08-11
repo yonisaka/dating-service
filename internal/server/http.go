@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/yonisaka/go-boilerplate/internal/consts"
-	"github.com/yonisaka/go-boilerplate/internal/di"
-	"github.com/yonisaka/go-boilerplate/pkg/logger"
+	"github.com/yonisaka/dating-service/internal/consts"
+	"github.com/yonisaka/dating-service/internal/di"
+	"github.com/yonisaka/dating-service/pkg/logger"
 )
 
 type httpServer struct {

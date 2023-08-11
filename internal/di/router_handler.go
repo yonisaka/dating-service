@@ -5,12 +5,12 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/yonisaka/go-boilerplate/internal/adapters/httphandler"
-	"github.com/yonisaka/go-boilerplate/internal/consts"
-	"github.com/yonisaka/go-boilerplate/internal/dto"
-	"github.com/yonisaka/go-boilerplate/internal/middleware"
-	"github.com/yonisaka/go-boilerplate/pkg/locales"
-	"github.com/yonisaka/go-boilerplate/pkg/logger"
+	"github.com/yonisaka/dating-service/internal/adapters/httphandler"
+	"github.com/yonisaka/dating-service/internal/consts"
+	"github.com/yonisaka/dating-service/internal/dto"
+	"github.com/yonisaka/dating-service/internal/middleware"
+	"github.com/yonisaka/dating-service/pkg/locales"
+	"github.com/yonisaka/dating-service/pkg/logger"
 )
 
 func (r *router) handle(hfn httpHandlerFunc, handler httphandler.Handler, mdws ...middleware.Handle) http.HandlerFunc {

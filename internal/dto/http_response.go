@@ -3,7 +3,7 @@ package dto
 import (
 	"sync"
 
-	"github.com/yonisaka/go-boilerplate/pkg/msg"
+	"github.com/yonisaka/dating-service/pkg/msg"
 )
 
 var rsp *HTTPResponse

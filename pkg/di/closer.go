@@ -7,7 +7,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/yonisaka/go-boilerplate/pkg/logger"
+	"github.com/yonisaka/dating-service/pkg/logger"
 )
 
 type closer struct {

@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/sirupsen/logrus"
-	"github.com/yonisaka/go-boilerplate/pkg/util"
+	"github.com/yonisaka/dating-service/pkg/util"
 )
 
 var (

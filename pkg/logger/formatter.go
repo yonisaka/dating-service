@@ -1,11 +1,12 @@
 package logger
 
 import (
-	"github.com/yonisaka/go-boilerplate/pkg/util"
 	"path/filepath"
 	"runtime"
 	"strings"
 	"sync"
+
+	"github.com/yonisaka/dating-service/pkg/util"
 
 	"github.com/sirupsen/logrus"
 )

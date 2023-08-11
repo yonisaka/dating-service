@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"github.com/urfave/cli/v2"
-	"github.com/yonisaka/go-boilerplate/config"
+	"github.com/yonisaka/dating-service/config"
 )
 
 // Command is a struct

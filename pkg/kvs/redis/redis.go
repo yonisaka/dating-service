@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/redis/go-redis/v9"
-	"github.com/yonisaka/go-boilerplate/pkg/kvs"
+	"github.com/yonisaka/dating-service/pkg/kvs"
 )
 
 type redisClient struct {

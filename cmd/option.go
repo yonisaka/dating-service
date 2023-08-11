@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/yonisaka/go-boilerplate/config"
+	"github.com/yonisaka/dating-service/config"
 )
 
 // Option is an option type

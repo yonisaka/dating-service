@@ -3,9 +3,9 @@ package httphandler
 import (
 	"net/http"
 
-	"github.com/yonisaka/go-boilerplate/internal/dto"
-	"github.com/yonisaka/go-boilerplate/internal/usecases"
-	"github.com/yonisaka/go-boilerplate/pkg/logger"
+	"github.com/yonisaka/dating-service/internal/dto"
+	"github.com/yonisaka/dating-service/internal/usecases"
+	"github.com/yonisaka/dating-service/pkg/logger"
 )
 
 // healthHandler is a struct for health handler

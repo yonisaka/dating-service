@@ -6,7 +6,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/yonisaka/go-boilerplate/pkg/file"
+	"github.com/yonisaka/dating-service/pkg/file"
 )
 
 var msgs map[int]*Message

@@ -1,8 +1,8 @@
 package usecases_test
 
 import (
-	"github.com/yonisaka/go-boilerplate/internal/entities/repository"
-	"github.com/yonisaka/go-boilerplate/internal/usecases"
+	"github.com/yonisaka/dating-service/internal/entities/repository"
+	"github.com/yonisaka/dating-service/internal/usecases"
 )
 
 type fields struct {

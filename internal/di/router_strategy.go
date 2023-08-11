@@ -3,9 +3,9 @@ package di
 import (
 	"net/http"
 
-	"github.com/yonisaka/go-boilerplate/internal/adapters/httphandler"
-	"github.com/yonisaka/go-boilerplate/internal/dto"
-	"github.com/yonisaka/go-boilerplate/pkg/routerkit"
+	"github.com/yonisaka/dating-service/internal/adapters/httphandler"
+	"github.com/yonisaka/dating-service/internal/dto"
+	"github.com/yonisaka/dating-service/pkg/routerkit"
 )
 
 // httpHandlerFunc is a contract http handler for router

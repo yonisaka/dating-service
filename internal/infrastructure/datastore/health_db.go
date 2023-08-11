@@ -3,7 +3,7 @@ package datastore
 import (
 	"context"
 
-	"github.com/yonisaka/go-boilerplate/internal/entities/repository"
+	"github.com/yonisaka/dating-service/internal/entities/repository"
 	"golang.org/x/sync/errgroup"
 )
 

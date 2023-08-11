@@ -1,6 +1,6 @@
 package di
 
-import "github.com/yonisaka/go-boilerplate/internal/adapters/httphandler"
+import "github.com/yonisaka/dating-service/internal/adapters/httphandler"
 
 // GetHealthHandler is a function to get health handler
 func GetHealthHandler() httphandler.Handler {
