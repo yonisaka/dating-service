@@ -20,12 +20,18 @@ func NewRouter() Router {
 func (r *router) Route() *routerkit.Router {
 	root := r.router.PathPrefix("/").Subrouter()
 
-	healthHandler := GetHealthHandler()
-
 	root.HandleFunc("/liveness", r.handle(
 		httpGateway,
-		healthHandler,
+		GetHealthHandler(),
 	)).Methods(http.MethodGet)
+
+	api := root.PathPrefix("/api").Subrouter()
+	apiV1 := api.PathPrefix("/v1").Subrouter()
+
+	apiV1.HandleFunc("/register", r.handle(
+		httpGateway,
+		GetRegisterHandler(),
+	)).Methods(http.MethodPost)
 
 	return r.router
 }

@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 
+	_ "github.com/lib/pq"
 	"github.com/pressly/goose/v3"
 	"github.com/yonisaka/dating-service/config"
 	"github.com/yonisaka/dating-service/pkg/logger"
@@ -18,10 +19,10 @@ var (
 	verbose = flags.Bool("verbose", false, "enable verbose mode")
 	help    = flags.Bool("guide", false, "print help")
 	version = flags.Bool("version", false, "print version")
+	dsnParm = flags.String("dsn", "", "database dsn")
 )
 
 func DatabaseMigration(cfg *config.DB) {
-
 	flags.Usage = usage
 	flags.Parse(os.Args[2:])
 
@@ -62,14 +63,15 @@ func DatabaseMigration(cfg *config.DB) {
 
 	command := args[0]
 
-	dbString := fmt.Sprintf("postgres://%s:%s@%s/%s?sslmode=disable",
+	dbConn := *dsnParm
+	dbConn = fmt.Sprintf("postgres://%s:%s@%s/%s?sslmode=disable",
 		cfg.User,
 		cfg.Password,
 		fmt.Sprintf("%s:%d", cfg.Host, cfg.Port),
 		cfg.DB,
 	)
 
-	db, err := goose.OpenDBWithDriver("postgres", dbString)
+	db, err := goose.OpenDBWithDriver("postgres", dbConn)
 
 	if err != nil {
 		logger.Fatal(err)

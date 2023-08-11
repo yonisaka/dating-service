@@ -11,7 +11,12 @@ func GetBaseRepo() *datastore.BaseRepo {
 	return datastore.NewBaseRepo(datastore.GetDatabaseMaster(&cfg.MasterDB), datastore.GetDatabaseSlave(&cfg.SlaveDB))
 }
 
-// GetHealthRepo returns BTCRepo instance.
+// GetHealthRepo returns HealthRepo instance.
 func GetHealthRepo() repository.HealthRepo {
 	return datastore.NewHealthRepo(GetBaseRepo())
+}
+
+// GetUserRepo returns UserRepo instance.
+func GetUserRepo() repository.UserRepo {
+	return datastore.NewUserRepo(GetBaseRepo())
 }

@@ -11,6 +11,7 @@ type (
 		MasterDB DB
 		SlaveDB  DB
 		Ws       Websocket
+		JWT      JWT
 	}
 
 	App struct {
@@ -45,6 +46,12 @@ type (
 		PeerHandleFormat  string
 		RoomTimeout       int
 		RoomAge           int
+	}
+
+	JWT struct {
+		JwtKey                string
+		JwtTokenExpiry        int
+		JwtRefreshTokenExpiry int
 	}
 )
 
@@ -86,6 +93,11 @@ func New() *Config {
 			PeerHandleFormat:  getEnv("WS_PEER_HANDLE_FORMAT", "Guest-%d"),
 			RoomTimeout:       getEnvAsInt("WS_ROOM_TIMEOUT", 10),
 			RoomAge:           getEnvAsInt("WS_ROOM_AGE", 24),
+		},
+		JWT: JWT{
+			JwtKey:                getEnv("JWT_KEY", "secret"),
+			JwtTokenExpiry:        getEnvAsInt("JWT_TOKEN_EXPIRY", 3600),
+			JwtRefreshTokenExpiry: getEnvAsInt("JWT_REFRESH_TOKEN_EXPIRY", 3600),
 		},
 	}
 }

@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS users
     intend VARCHAR(20) NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW(),
-    CONSTRAINT user_interests_pkey PRIMARY KEY (id)
+    CONSTRAINT user_pkey PRIMARY KEY (id)
 )
 -- +goose StatementEnd
 
