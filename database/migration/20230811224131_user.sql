@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS users
     password VARCHAR(255) NOT NULL,
     dob DATE NOT NULL,
     gender VARCHAR(10) NOT NULL,
-    intend VARCHAR(20) NOT NULL,
+    intend VARCHAR(50) NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW(),
     CONSTRAINT user_pkey PRIMARY KEY (id)

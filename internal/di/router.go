@@ -14,6 +14,8 @@ type router struct {
 
 func NewRouter() Router {
 	cfg := GetConfig()
+	RegistryMessage()
+
 	return &router{cfg: cfg, router: routerkit.NewRouter(routerkit.WithServiceName(cfg.App.Name))}
 }
 
@@ -31,6 +33,35 @@ func (r *router) Route() *routerkit.Router {
 	apiV1.HandleFunc("/register", r.handle(
 		httpGateway,
 		GetRegisterHandler(),
+	)).Methods(http.MethodPost)
+
+	apiV1.HandleFunc("/login", r.handle(
+		httpGateway,
+		GetLoginHandler(),
+	)).Methods(http.MethodPost)
+
+	apiV1.HandleFunc("/profile", r.handle(
+		httpGateway,
+		GetProfileHandler(),
+		GetAuthMiddleware().Authenticate,
+	)).Methods(http.MethodGet)
+
+	apiV1.HandleFunc("/query-profile", r.handle(
+		httpGateway,
+		GetQueryProfileHandler(),
+		GetAuthMiddleware().Authenticate,
+	)).Methods(http.MethodGet)
+
+	apiV1.HandleFunc("/subscribe", r.handle(
+		httpGateway,
+		GetSubscribeHandler(),
+		GetAuthMiddleware().Authenticate,
+	)).Methods(http.MethodPost)
+
+	apiV1.HandleFunc("/upload-image", r.handle(
+		httpGateway,
+		GetUploadImageHandler(),
+		GetAuthMiddleware().Authenticate,
 	)).Methods(http.MethodPost)
 
 	return r.router

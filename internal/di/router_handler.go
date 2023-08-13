@@ -46,10 +46,10 @@ func (r *router) handle(hfn httpHandlerFunc, handler httphandler.Handler, mdws .
 		ctx = locales.WithAcceptLanguage(ctx, lang)
 		req = req.WithContext(ctx)
 
-		if err := middleware.FilterFunc(req, mdws); err != nil {
+		if code := middleware.FilterFunc(req, mdws); code != http.StatusOK {
 			r.response(w, dto.HTTPResponse{
-				Lang:   lang,
-				Errors: err,
+				Lang: lang,
+				Code: code,
 			})
 
 			return

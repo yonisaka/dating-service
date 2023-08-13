@@ -5,15 +5,15 @@ import (
 )
 
 // Handle is contract for middleware and must implement this type for http if you need middleware http request
-type Handle func(r *http.Request) error
+type Handle func(r *http.Request) int
 
 // FilterFunc is a iterator resolver in each middleware registered
-func FilterFunc(r *http.Request, mfs []Handle) error {
+func FilterFunc(r *http.Request, mfs []Handle) int {
 	for _, mf := range mfs {
-		if err := mf(r); err != nil {
-			return err
+		if code := mf(r); code >= 400 {
+			return code
 		}
 	}
 
-	return nil
+	return http.StatusOK
 }

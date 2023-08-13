@@ -11,30 +11,28 @@ import (
 	"github.com/yonisaka/dating-service/pkg/logger"
 )
 
-// registerHandler is a struct for health handler
-type registerHandler struct {
+// loginHandler is a struct for login handler
+type loginHandler struct {
 	authUsecase usecases.AuthUsecase
 }
 
-// NewRegisterHandler is a constructor function for health handler
-func NewRegisterHandler(
+// NewLoginHandler is a constructor function for login handler
+func NewLoginHandler(
 	authUsecase usecases.AuthUsecase,
 ) Handler {
-	return &registerHandler{
+	return &loginHandler{
 		authUsecase: authUsecase,
 	}
 }
 
-// Handle is a function to handle health check
-//
-//nolint:funlen
-func (h *registerHandler) Handle(req *http.Request) dto.HTTPResponse {
+// Handle is a function to handle login check
+func (h *loginHandler) Handle(req *http.Request) dto.HTTPResponse {
 	var (
 		ctx = req.Context()
 		lf  = logger.NewFields(
-			logger.EventName("handler.register"),
+			logger.EventName("handler.login"),
 		)
-		param  presentations.RegisterRequest
+		param  presentations.LoginRequest
 		errors []presentations.ErrorValidation
 	)
 
@@ -50,14 +48,8 @@ func (h *registerHandler) Handle(req *http.Request) dto.HTTPResponse {
 	}
 
 	rules := govalidator.MapData{
-		"first_name": []string{"required", "max:50"},
-		"last_name":  []string{"required", "max:50"},
-		"email":      []string{"required", "email"},
-		"phone":      []string{"required", "min:10", "max:15"},
-		"password":   []string{"required", "min:8"},
-		"dob":        []string{"required", "date"},
-		"gender":     []string{"required", "in:man,woman"},
-		"intend":     []string{"required", "in:long-term,long-term partner,short-term fun,short-term but long-term ok,new friends,still figuring it out"}, //nolint:lll
+		"email":    []string{"required", "email"},
+		"password": []string{"required", "min:8"},
 	}
 
 	opt := govalidator.New(
@@ -85,7 +77,7 @@ func (h *registerHandler) Handle(req *http.Request) dto.HTTPResponse {
 			WithError(errors)
 	}
 
-	result, err := h.authUsecase.Register(req.Context(), param)
+	result, err := h.authUsecase.Login(ctx, param)
 	if err != nil {
 		logger.ErrorWithContext(req.Context(), err.Error(), lf...)
 
@@ -94,5 +86,5 @@ func (h *registerHandler) Handle(req *http.Request) dto.HTTPResponse {
 			WithMessage(err.Error())
 	}
 
-	return *dto.NewResponse().WithCode(http.StatusOK).WithData(result).WithMessage("Success Register")
+	return *dto.NewResponse().WithCode(http.StatusOK).WithData(result).WithMessage("success login")
 }

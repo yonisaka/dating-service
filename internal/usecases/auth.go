@@ -11,6 +11,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
+// Login is a function to login user
 func (u *authUsecase) Login(ctx context.Context, req presentations.LoginRequest) (*presentations.LoginResponse, error) {
 	var (
 		lf = logger.NewFields(
@@ -25,18 +26,32 @@ func (u *authUsecase) Login(ctx context.Context, req presentations.LoginRequest)
 		return nil, err
 	}
 
-	userToken := u.token.CreateTokenJWT(user.ID)
+	ok, err := crypto.CompareHash(user.Password, req.Password)
+	if err != nil {
+		logger.ErrorWithContext(ctx, err.Error(), lf...)
+		return nil, err
+	}
+
+	if !ok {
+		logger.ErrorWithContext(ctx, err.Error(), lf...)
+		return nil, err
+	}
+
+	userToken := u.authenticator.CreateTokenJWT(user.ID)
 
 	result = presentations.LoginResponse{
 		AccessToken:  userToken.AccessToken,
 		RefreshToken: userToken.RefreshToken,
-		ExpiredAt:    userToken.AtExpires,
+		ExpiredAt:    userToken.AtExpires.Format(time.DateTime),
 	}
 
 	return &result, nil
 }
 
-func (u *authUsecase) Register(ctx context.Context, req presentations.RegisterRequest) (*presentations.RegisterResponse, error) {
+// Register is a function to register user
+//
+//nolint:funlen
+func (u *authUsecase) Register(ctx context.Context, req presentations.RegisterRequest) (*presentations.RegisterResponse, error) { //nolint:lll
 	var (
 		lf = logger.NewFields(
 			logger.EventName("usecase.auth.register"),
@@ -88,6 +103,8 @@ func (u *authUsecase) Register(ctx context.Context, req presentations.RegisterRe
 			LastName:  user.LastName,
 			Email:     user.Email,
 			Phone:     user.Phone,
+			Dob:       user.Dob.Format(time.DateTime),
+			Gender:    user.Gender,
 		}
 
 		return nil

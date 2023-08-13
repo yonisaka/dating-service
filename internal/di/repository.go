@@ -20,3 +20,18 @@ func GetHealthRepo() repository.HealthRepo {
 func GetUserRepo() repository.UserRepo {
 	return datastore.NewUserRepo(GetBaseRepo())
 }
+
+// GetUserPreferenceRepo returns UserPreferenceRepo instance.
+func GetUserPreferenceRepo() repository.UserPreferenceRepo {
+	return datastore.NewUserPreferenceRepo(GetBaseRepo())
+}
+
+// GetUserSubscriptionRepo returns UserSubscriptionRepo instance.
+func GetUserSubscriptionRepo() repository.UserSubscriptionRepo {
+	return datastore.NewUserSubscriptionRepo(GetBaseRepo())
+}
+
+// GetUserImageRepo returns UserImageRepo instance.
+func GetUserImageRepo() repository.UserImageRepo {
+	return datastore.NewUserImageRepo(GetBaseRepo())
+}

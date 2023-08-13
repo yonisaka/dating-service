@@ -7,11 +7,13 @@ import (
 
 type (
 	Config struct {
-		App      App
-		MasterDB DB
-		SlaveDB  DB
-		Ws       Websocket
-		JWT      JWT
+		App        App
+		MasterDB   DB
+		SlaveDB    DB
+		Ws         Websocket
+		JWT        JWT
+		Redis      Redis
+		Cloudinary Cloudinary
 	}
 
 	App struct {
@@ -52,6 +54,20 @@ type (
 		JwtKey                string
 		JwtTokenExpiry        int
 		JwtRefreshTokenExpiry int
+	}
+
+	Redis struct {
+		Host     string
+		Port     int
+		Password string
+		DB       int
+	}
+
+	Cloudinary struct {
+		CloudName string
+		Bucket    string
+		APIKey    string
+		APISecret string
 	}
 )
 
@@ -96,8 +112,20 @@ func New() *Config {
 		},
 		JWT: JWT{
 			JwtKey:                getEnv("JWT_KEY", "secret"),
-			JwtTokenExpiry:        getEnvAsInt("JWT_TOKEN_EXPIRY", 3600),
-			JwtRefreshTokenExpiry: getEnvAsInt("JWT_REFRESH_TOKEN_EXPIRY", 3600),
+			JwtTokenExpiry:        getEnvAsInt("JWT_TOKEN_EXPIRY", 7200),
+			JwtRefreshTokenExpiry: getEnvAsInt("JWT_REFRESH_TOKEN_EXPIRY", 7200),
+		},
+		Redis: Redis{
+			Host:     getEnv("REDIS_HOST", "localhost"),
+			Port:     getEnvAsInt("REDIS_PORT", 6379),
+			Password: getEnv("REDIS_PASSWORD", ""),
+			DB:       getEnvAsInt("REDIS_DB", 0),
+		},
+		Cloudinary: Cloudinary{
+			CloudName: getEnv("CLOUDINARY_CLOUD_NAME", ""),
+			Bucket:    getEnv("CLOUDINARY_BUCKET", ""),
+			APIKey:    getEnv("CLOUDINARY_API_KEY", ""),
+			APISecret: getEnv("CLOUDINARY_API_SECRET", ""),
 		},
 	}
 }

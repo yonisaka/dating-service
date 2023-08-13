@@ -11,3 +11,28 @@ func GetHealthHandler() httphandler.Handler {
 func GetRegisterHandler() httphandler.Handler {
 	return httphandler.NewRegisterHandler(GetAuthUsecase())
 }
+
+// GetLoginHandler is a function to get login handler
+func GetLoginHandler() httphandler.Handler {
+	return httphandler.NewLoginHandler(GetAuthUsecase())
+}
+
+// GetProfileHandler is a function to get profile handler
+func GetProfileHandler() httphandler.Handler {
+	return httphandler.NewProfileHandler(GetProfileUsecase())
+}
+
+// GetQueryProfileHandler is a function to get query profile handler
+func GetQueryProfileHandler() httphandler.Handler {
+	return httphandler.NewQueryProfileHandler(GetQueryProfileUsecase())
+}
+
+// GetSubscribeHandler is a function to get subscribe handler
+func GetSubscribeHandler() httphandler.Handler {
+	return httphandler.NewSubscribeHandler(GetSubscribeUsecase())
+}
+
+// GetUploadImageHandler is a function to get upload image handler
+func GetUploadImageHandler() httphandler.Handler {
+	return httphandler.NewUploadImageHandler(GetProfileUsecase())
+}

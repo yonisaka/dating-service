@@ -5,7 +5,7 @@ import (
 
 	"github.com/yonisaka/dating-service/internal/entities/repository"
 	"github.com/yonisaka/dating-service/internal/presentations"
-	"github.com/yonisaka/dating-service/pkg/jwtx"
+	"github.com/yonisaka/dating-service/pkg/auth"
 )
 
 // AuthUsecase is an interface for auth usecase
@@ -16,13 +16,15 @@ type AuthUsecase interface {
 
 func NewAuthUsecase(
 	userRepo repository.UserRepo,
+	authenticator auth.Authenticator,
 ) AuthUsecase {
 	return &authUsecase{
-		userRepo: userRepo,
+		userRepo:      userRepo,
+		authenticator: authenticator,
 	}
 }
 
 type authUsecase struct {
-	userRepo repository.UserRepo
-	token    jwtx.JWTImpl
+	userRepo      repository.UserRepo
+	authenticator auth.Authenticator
 }

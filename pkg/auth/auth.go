@@ -1,9 +1,8 @@
-package jwtx
+package auth
 
 import (
 	"errors"
 	"fmt"
-	"os"
 	"strings"
 	"time"
 
@@ -21,44 +20,44 @@ type TokenDetails struct {
 	RtExpires    time.Time
 }
 
-type JWTImpl interface {
+type Authenticator interface {
 	CreateTokenJWT(userID int64) *TokenDetails
 	RequestTokenJwt(token string) (interface{}, jwt.MapClaims, error)
 }
 
-type jwtx struct {
+type auth struct {
 	cfg *config.Config
 }
 
-func NewJWT() JWTImpl {
-	return &jwtx{}
+func NewAuthenticator(cfg *config.Config) Authenticator {
+	return &auth{cfg: cfg}
 }
 
-func (j *jwtx) CreateTokenJWT(userID int64) *TokenDetails {
+func (a *auth) CreateTokenJWT(userID int64) *TokenDetails {
 	// create ssid
 	suuid := uuid.New().String()
 	rsuuid := uuid.New().String()
 
 	// create token
-	tokenExpiry := time.Now().Add(time.Duration(j.cfg.JWT.JwtTokenExpiry) * time.Second)
+	tokenExpiry := time.Now().Add(time.Duration(a.cfg.JWT.JwtTokenExpiry) * time.Second)
 	atClaims := jwt.MapClaims{
-		"authorized":   true,
-		"dtid":         suuid,
-		"expiary_time": tokenExpiry,
-		"user_id":      userID,
+		"authorized":  true,
+		"dtid":        suuid,
+		"expiry_time": tokenExpiry,
+		"user_id":     userID,
 	}
 	at := jwt.NewWithClaims(jwt.SigningMethodHS256, atClaims)
-	token, _ := at.SignedString([]byte(j.cfg.JWT.JwtKey))
+	token, _ := at.SignedString([]byte(a.cfg.JWT.JwtKey))
 
-	refreshTokenExpiry := time.Now().Add(time.Duration(j.cfg.JWT.JwtRefreshTokenExpiry) * time.Second)
+	refreshTokenExpiry := time.Now().Add(time.Duration(a.cfg.JWT.JwtRefreshTokenExpiry) * time.Second)
 	ratClaims := jwt.MapClaims{
-		"authorized":           true,
-		"dtid":                 rsuuid,
-		"refresh_expiary_time": refreshTokenExpiry,
-		"user_id":              userID,
+		"authorized":          true,
+		"dtid":                rsuuid,
+		"refresh_expiry_time": refreshTokenExpiry,
+		"user_id":             userID,
 	}
 	rat := jwt.NewWithClaims(jwt.SigningMethodHS256, ratClaims)
-	refreshToken, _ := rat.SignedString([]byte(j.cfg.JWT.JwtKey))
+	refreshToken, _ := rat.SignedString([]byte(a.cfg.JWT.JwtKey))
 
 	tokenDetails := &TokenDetails{
 		AccessToken:  token,
@@ -72,13 +71,13 @@ func (j *jwtx) CreateTokenJWT(userID int64) *TokenDetails {
 	return tokenDetails
 }
 
-func (j *jwtx) RequestTokenJwt(authorizationHeader string) (interface{}, jwt.MapClaims, error) {
-	tokenString := strings.Replace(authorizationHeader, "Bearer ", "", -1)
+func (a *auth) RequestTokenJwt(authHeader string) (interface{}, jwt.MapClaims, error) {
+	tokenString := strings.Replace(authHeader, "Bearer ", "", -1)
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
-		return []byte(os.Getenv("JWT_KEY")), nil
+		return []byte(a.cfg.JWT.JwtKey), nil
 	})
 
 	if err != nil {
