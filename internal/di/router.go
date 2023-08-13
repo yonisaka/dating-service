@@ -71,5 +71,11 @@ func (r *router) Route() *routerkit.Router {
 		GetAuthMiddleware().Authenticate,
 	)).Methods(http.MethodPost)
 
+	apiV1.HandleFunc("/action-history", r.handle(
+		httpGateway,
+		GetActionHistoryHandler(),
+		GetAuthMiddleware().Authenticate,
+	)).Methods(http.MethodGet)
+
 	return r.router
 }

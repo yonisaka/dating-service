@@ -37,3 +37,7 @@ func GetQueryProfileUsecase() usecases.QueryProfileUsecase {
 func GetSubscribeUsecase() usecases.SubscribeUsecase {
 	return usecases.NewSubscribeUsecase(GetUserRepo(), GetUserSubscriptionRepo())
 }
+
+func GetActionHistoryUsecase() usecases.ActionHistoryUsecase {
+	return usecases.NewActionHistoryUsecase(GetUserActionHistoryRepo(), GetUserRepo())
+}

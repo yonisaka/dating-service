@@ -22,12 +22,13 @@ func NewUserActionHistoryRepo(base *BaseRepo) repository.UserActionHistoryRepo {
 
 // FindByUserID is a method
 func (r *userActionHistory) FindByUserID(ctx context.Context, userID int64) ([]repository.UserActionHistory, error) {
-	var userActionHistories []repository.UserActionHistory
+	var actionHistories []repository.UserActionHistory
 
 	query := `
 		SELECT id, user_id, profile_id, action, created_at, updated_at
 		FROM user_action_history
 		WHERE user_id = $1
+		ORDER BY updated_at DESC
 	`
 
 	rows, err := r.dbMaster.Query(ctx, query, userID)
@@ -37,19 +38,19 @@ func (r *userActionHistory) FindByUserID(ctx context.Context, userID int64) ([]r
 	defer rows.Close()
 
 	for rows.Next() {
-		var userActionHistory repository.UserActionHistory
+		var actionHistory repository.UserActionHistory
 		if err := rows.Scan(
-			&userActionHistory.ID,
-			&userActionHistory.UserID,
-			&userActionHistory.ProfileID,
-			&userActionHistory.Action,
-			&userActionHistory.CreatedAt,
-			&userActionHistory.UpdatedAt,
+			&actionHistory.ID,
+			&actionHistory.UserID,
+			&actionHistory.ProfileID,
+			&actionHistory.Action,
+			&actionHistory.CreatedAt,
+			&actionHistory.UpdatedAt,
 		); err != nil {
 			return nil, fmt.Errorf("failed to scan: %w", err)
 		}
 
-		userActionHistories = append(userActionHistories, userActionHistory)
+		actionHistories = append(actionHistories, actionHistory)
 	}
 
 	if err == pgx.ErrNoRows {
@@ -60,7 +61,7 @@ func (r *userActionHistory) FindByUserID(ctx context.Context, userID int64) ([]r
 		return nil, err
 	}
 
-	return userActionHistories, nil
+	return actionHistories, nil
 }
 
 // Store is a method

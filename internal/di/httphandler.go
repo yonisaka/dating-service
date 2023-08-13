@@ -41,3 +41,8 @@ func GetUploadImageHandler() httphandler.Handler {
 func GetPreferenceHandler() httphandler.Handler {
 	return httphandler.NewPreferenceHandler(GetProfileUsecase())
 }
+
+// GetActionHistoryHandler is a function to get action history handler
+func GetActionHistoryHandler() httphandler.Handler {
+	return httphandler.NewActionHistoryHandler(GetActionHistoryUsecase())
+}

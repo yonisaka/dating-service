@@ -16,8 +16,7 @@ import (
 
 // GetQueryProfile QueryProfileUsecase is an interface for auth usecase
 //
-//nolint:funlen
-//nolint:gocognit
+//nolint:all
 func (u *queryProfileUsecase) GetQueryProfile(
 	ctx context.Context,
 	req presentations.QueryProfileRequest,
