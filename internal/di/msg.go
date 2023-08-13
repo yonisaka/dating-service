@@ -10,5 +10,4 @@ func RegistryMessage() {
 	if err != nil {
 		logger.Fatal(logger.MessageFormat("file message multi language load error %s", err.Error()))
 	}
-
 }

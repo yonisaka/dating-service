@@ -13,5 +13,6 @@ func InArray(val any, array any) bool {
 			}
 		}
 	}
+
 	return false
 }

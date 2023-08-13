@@ -11,7 +11,8 @@ func GetAuthUsecase() usecases.AuthUsecase {
 }
 
 func GetProfileUsecase() usecases.ProfileUsecase {
-	return usecases.NewProfileUsecase(GetConfig(), GetUserRepo(), GetUserSubscriptionRepo(), GetUserImageRepo(), GetCloudinaryStorage())
+	return usecases.NewProfileUsecase(
+		GetConfig(), GetUserRepo(), GetUserSubscriptionRepo(), GetUserImageRepo(), GetCloudinaryStorage())
 }
 
 func GetQueryProfileUsecase() usecases.QueryProfileUsecase {

@@ -150,12 +150,3 @@ func getEnvAsInt(name string, defaultVal int) int {
 
 	return defaultVal
 }
-
-func getEnvAsBool(name string, defaultVal bool) bool {
-	valueStr := getEnv(name, "")
-	if value, err := strconv.ParseBool(valueStr); err == nil {
-		return value
-	}
-
-	return defaultVal
-}

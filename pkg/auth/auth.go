@@ -14,8 +14,8 @@ import (
 type TokenDetails struct {
 	AccessToken  string
 	RefreshToken string
-	AccessUuid   string
-	RefreshUuid  string
+	AccessUUID   string
+	RefreshUUID  string
 	AtExpires    time.Time
 	RtExpires    time.Time
 }
@@ -62,8 +62,8 @@ func (a *auth) CreateTokenJWT(userID int64) *TokenDetails {
 	tokenDetails := &TokenDetails{
 		AccessToken:  token,
 		RefreshToken: refreshToken,
-		AccessUuid:   suuid,
-		RefreshUuid:  rsuuid,
+		AccessUUID:   suuid,
+		RefreshUUID:  rsuuid,
 		AtExpires:    tokenExpiry,
 		RtExpires:    refreshTokenExpiry,
 	}

@@ -22,14 +22,19 @@ var (
 	dsnParm = flags.String("dsn", "", "database dsn")
 )
 
+//nolint:funlen
 func DatabaseMigration(cfg *config.DB) {
 	flags.Usage = usage
-	flags.Parse(os.Args[2:])
+	err := flags.Parse(os.Args[2:])
+	if err != nil {
+		return
+	}
 
 	if *version {
 		fmt.Println(goose.MaxVersion)
 		return
 	}
+
 	if *verbose {
 		goose.SetVerbose(true)
 	}
@@ -48,11 +53,13 @@ func DatabaseMigration(cfg *config.DB) {
 		if err := goose.Run("create", nil, *dir, args[1:]...); err != nil {
 			log.Fatalf("goose run: %v", err)
 		}
+
 		return
 	case "fix":
 		if err := goose.Run("fix", nil, *dir); err != nil {
 			log.Fatalf("goose run: %v", err)
 		}
+
 		return
 	}
 
@@ -76,6 +83,7 @@ func DatabaseMigration(cfg *config.DB) {
 	if err != nil {
 		logger.Fatal(err)
 	}
+
 	defer func() {
 		if err := db.Close(); err != nil {
 			logger.Fatal(logger.MessageFormat("db migrate: failed to close DB: %v\n", err))

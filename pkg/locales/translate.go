@@ -30,12 +30,14 @@ func (t *translator) loadLocalesFile(filepath string) (map[string]string, error)
 
 	buf := new(bytes.Buffer)
 	_, err = io.Copy(buf, f)
+
 	if err != nil {
 		return nil, err
 	}
 
 	anyLocale := make(map[string]interface{})
 	err = yaml.Unmarshal(buf.Bytes(), &anyLocale)
+
 	if err != nil {
 		return nil, err
 	}
@@ -49,6 +51,7 @@ func (t *translator) loadLocalesFile(filepath string) (map[string]string, error)
 func langFromFilename(name string) string {
 	pathParts := strings.Split(name, "/")
 	lang := strings.Split(pathParts[len(pathParts)-1], ".")[0]
+
 	return lang
 }
 
@@ -74,6 +77,7 @@ func concatMap(root map[string]string, maps ...map[string]string) map[string]str
 
 func flatten(m map[string]interface{}) map[string]string {
 	o := make(map[string]string)
+
 	for k, v := range m {
 		switch child := v.(type) {
 		case map[string]interface{}:
@@ -85,6 +89,7 @@ func flatten(m map[string]interface{}) map[string]string {
 			o[k] = fmt.Sprintf("%s", v)
 		}
 	}
+
 	return o
 }
 
@@ -103,6 +108,7 @@ func NewTranslator(defaultLang string, filepath ...string) Translator {
 
 	t.data = root
 	t.defaultLang = defaultLang
+
 	return &t
 }
 

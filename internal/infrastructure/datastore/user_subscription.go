@@ -37,7 +37,7 @@ func (r *userSubscriptionRepo) FindByUserID(ctx context.Context, userID int64) (
 	)
 
 	if err == pgx.ErrNoRows {
-		return nil, nil
+		return nil, nil //nolint:nilnil
 	}
 
 	if err != nil {

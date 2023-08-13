@@ -2,9 +2,10 @@ package routerkit
 
 import (
 	"fmt"
-	"github.com/opentracing/opentracing-go"
 	"net/http"
 	"strconv"
+
+	"github.com/opentracing/opentracing-go"
 )
 
 // TraceAndServe will apply tracing to the given http.Handler using the passed tracer under the given service and resource.
@@ -40,6 +41,8 @@ func TraceAndServe(h http.Handler, w http.ResponseWriter, r *http.Request, servi
 //
 // This code is generated because we have to account for all the permutations
 // of the interfaces.
+//
+//nolint:funlen
 func wrapResponseWriter(w http.ResponseWriter, span opentracing.Span) http.ResponseWriter {
 	hFlusher, okFlusher := w.(http.Flusher)
 	hPusher, okPusher := w.(http.Pusher)
@@ -47,7 +50,7 @@ func wrapResponseWriter(w http.ResponseWriter, span opentracing.Span) http.Respo
 	hHijacker, okHijacker := w.(http.Hijacker)
 
 	w = newResponseWriter(w, span)
-	switch {
+	switch { //nolint:wsl
 	case okFlusher && okPusher && okCloseNotifier && okHijacker:
 		w = struct {
 			http.ResponseWriter
@@ -164,6 +167,7 @@ func (w *responseWriter) Write(b []byte) (int, error) {
 	if w.status == 0 {
 		w.WriteHeader(http.StatusOK)
 	}
+
 	return w.ResponseWriter.Write(b)
 }
 
@@ -173,6 +177,7 @@ func (w *responseWriter) WriteHeader(status int) {
 	w.ResponseWriter.WriteHeader(status)
 	w.status = status
 	w.span.SetTag("http.status_code", strconv.Itoa(status))
+
 	if status >= 500 && status < 600 {
 		w.span.SetTag("error", fmt.Errorf("%d: %s", status, http.StatusText(status)))
 	}

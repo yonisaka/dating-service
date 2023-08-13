@@ -21,9 +21,7 @@ type cloudinaryClient struct {
 
 func NewCloudinaryClient(cfg config.Cloudinary) Storage {
 	client, _ := cloudinary.NewFromParams(cfg.CloudName, cfg.APIKey, cfg.APISecret)
-	return &cloudinaryClient{
-		client: client,
-	}
+	return &cloudinaryClient{client: client}
 }
 
 // Put do nothing

@@ -11,6 +11,7 @@ func ReadFromYAML(path string, target interface{}) error {
 	if err != nil {
 		return err
 	}
+
 	return yaml.Unmarshal(
 		yf,
 		target,

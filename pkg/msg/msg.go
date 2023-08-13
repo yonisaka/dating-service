@@ -88,13 +88,16 @@ func Setup(fname string, paths ...string) error {
 // Get messages by language
 func Get(code int, lang string) string {
 	var text string
+
 	lang = cleanLangStr(lang)
+
 	if m, ok := msgs[code]; ok {
 		if c, ok := m.contents[lang]; ok {
 			text = c.Text
 			return text
 		}
 	}
+
 	return text
 }
 
@@ -113,6 +116,7 @@ func GetMessageCode(key int, lang string) (int, string) {
 		code int
 		text string
 	)
+
 	cleanLang := cleanLangStr(lang)
 	if m, ok := msgs[key]; ok { //nolint:wsl
 		code = m.Code
@@ -123,6 +127,7 @@ func GetMessageCode(key int, lang string) (int, string) {
 	}
 
 	code = http.StatusUnprocessableEntity
+
 	return code, text
 }
 

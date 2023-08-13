@@ -28,9 +28,9 @@ func (u *queryProfileUsecase) GetQueryProfile(ctx context.Context) (*presentatio
 		authInfo         = helper.AuthInfoFromContext(ctx)
 		key              = fmt.Sprintf("user:query:%d", authInfo.UserID)
 		result           *presentations.QueryProfileResponse
-		existUserIDs     []int64
 	)
 
+	existUserIDs := make([]int64, 0)
 	group, _ := errgroup.WithContext(ctx)
 
 	group.Go(func() error {

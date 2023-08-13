@@ -6,9 +6,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/yonisaka/dating-service/pkg/util"
-
 	"github.com/sirupsen/logrus"
+	"github.com/yonisaka/dating-service/pkg/util"
 )
 
 const (
@@ -71,10 +70,12 @@ func (f *Formatter) Format(entry *logrus.Entry) ([]byte, error) {
 	if f.Line {
 		data[LineKey] = line
 	}
+
 	if f.Package {
 		packageName := function[:packageEnd]
 		data[PackageKey] = packageName
 	}
+
 	if f.File {
 		if f.BaseNameOnly {
 			data[FileKey] = filepath.Base(file)
@@ -82,9 +83,11 @@ func (f *Formatter) Format(entry *logrus.Entry) ([]byte, error) {
 			data[FileKey] = file
 		}
 	}
+
 	for k, v := range entry.Data {
 		data[k] = v
 	}
+
 	entry.Data = data
 
 	return f.ChildFormatter.Format(entry)

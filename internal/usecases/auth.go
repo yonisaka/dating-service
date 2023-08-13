@@ -51,7 +51,7 @@ func (u *authUsecase) Login(ctx context.Context, req presentations.LoginRequest)
 // Register is a function to register user
 //
 //nolint:funlen
-func (u *authUsecase) Register(ctx context.Context, req presentations.RegisterRequest) (*presentations.RegisterResponse, error) { //nolint:lll
+func (u *authUsecase) Register(ctx context.Context, req presentations.RegisterRequest) (*presentations.RegisterResponse, error) {
 	var (
 		lf = logger.NewFields(
 			logger.EventName("usecase.auth.register"),

@@ -77,7 +77,7 @@ func (r *redisClient) HSet(ctx context.Context, key string, field string, value 
 func (r *redisClient) Get(ctx context.Context, key string) (interface{}, error) {
 	val, err := r.Client.Get(ctx, key).Result()
 	if errors.Is(err, redis.Nil) {
-		return nil, nil
+		return nil, nil //nolint:nilnil
 	} else if err != nil {
 		return nil, fmt.Errorf("failed to execute get command. key: %v: %w", key, err)
 	}

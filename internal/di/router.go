@@ -14,7 +14,8 @@ type router struct {
 
 func NewRouter() Router {
 	cfg := GetConfig()
-	RegistryMessage()
+
+	RegistryMessage() //nolint:nolint
 
 	return &router{cfg: cfg, router: routerkit.NewRouter(routerkit.WithServiceName(cfg.App.Name))}
 }
