@@ -13,6 +13,7 @@ import (
 type ProfileUsecase interface {
 	GetProfile(ctx context.Context) (*presentations.ProfileResponse, error)
 	UploadImages(ctx context.Context, req presentations.UploadImageRequest) error
+	SetPreference(ctx context.Context, req presentations.UserPreferenceRequest) error
 }
 
 func NewProfileUsecase(
@@ -20,6 +21,7 @@ func NewProfileUsecase(
 	userRepo repository.UserRepo,
 	userSubscriptionRepo repository.UserSubscriptionRepo,
 	userImageRepo repository.UserImageRepo,
+	userPreferenceRepo repository.UserPreferenceRepo,
 	storage storage.Storage,
 ) ProfileUsecase {
 	return &profileUsecase{
@@ -27,6 +29,7 @@ func NewProfileUsecase(
 		userRepo:             userRepo,
 		userSubscriptionRepo: userSubscriptionRepo,
 		userImageRepo:        userImageRepo,
+		userPreferenceRepo:   userPreferenceRepo,
 		storage:              storage,
 	}
 }
@@ -36,5 +39,6 @@ type profileUsecase struct {
 	userRepo             repository.UserRepo
 	userSubscriptionRepo repository.UserSubscriptionRepo
 	userImageRepo        repository.UserImageRepo
+	userPreferenceRepo   repository.UserPreferenceRepo
 	storage              storage.Storage
 }

@@ -99,12 +99,12 @@ func (u *profileUsecase) GetProfile(ctx context.Context) (*presentations.Profile
 
 // UploadImages is a function to upload images
 func (u *profileUsecase) UploadImages(ctx context.Context, req presentations.UploadImageRequest) error {
-	var ( //nolint:prealloc
+	var (
 		lf = logger.NewFields(
 			logger.EventName("usecase.upload_images"),
 		)
 		authInfo   = helper.AuthInfoFromContext(ctx)
-		userImages []repository.UserImage
+		userImages = make([]repository.UserImage, 0)
 	)
 
 	for _, image := range req.Images {
@@ -148,6 +148,30 @@ func (u *profileUsecase) UploadImages(ctx context.Context, req presentations.Upl
 	}
 
 	err := u.userImageRepo.StoreBulk(ctx, userImages)
+	if err != nil {
+		logger.ErrorWithContext(ctx, err.Error(), lf...)
+		return err
+	}
+
+	return nil
+}
+
+// SetPreference is a function to set preference
+func (u *profileUsecase) SetPreference(ctx context.Context, req presentations.UserPreferenceRequest) error {
+	var (
+		lf = logger.NewFields(
+			logger.EventName("usecase.upload_images"),
+		)
+		authInfo = helper.AuthInfoFromContext(ctx)
+	)
+
+	err := u.userPreferenceRepo.Update(ctx, repository.UserPreference{
+		UserID:    authInfo.UserID,
+		MinAge:    req.MinAge,
+		MaxAge:    req.MaxAge,
+		UseIntend: req.UseIntend,
+	})
+
 	if err != nil {
 		logger.ErrorWithContext(ctx, err.Error(), lf...)
 		return err

@@ -11,7 +11,3 @@ type ProfileResponse struct {
 	Intend    string   `json:"intend"`
 	Images    []string `json:"images"`
 }
-
-type UploadImageRequest struct {
-	Images []string `json:"images"`
-}

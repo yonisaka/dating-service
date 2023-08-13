@@ -16,4 +16,5 @@ type UserPreference struct {
 // UserPreferenceRepo is a user preference repository interface.
 type UserPreferenceRepo interface {
 	FindByUserID(ctx context.Context, userID int64) (*UserPreference, error)
+	Update(ctx context.Context, userPreference UserPreference) error
 }

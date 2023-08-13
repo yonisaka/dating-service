@@ -65,5 +65,11 @@ func (r *router) Route() *routerkit.Router {
 		GetAuthMiddleware().Authenticate,
 	)).Methods(http.MethodPost)
 
+	apiV1.HandleFunc("/preference", r.handle(
+		httpGateway,
+		GetPreferenceHandler(),
+		GetAuthMiddleware().Authenticate,
+	)).Methods(http.MethodPost)
+
 	return r.router
 }

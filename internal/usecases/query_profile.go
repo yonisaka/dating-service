@@ -17,7 +17,11 @@ import (
 // GetQueryProfile QueryProfileUsecase is an interface for auth usecase
 //
 //nolint:funlen
-func (u *queryProfileUsecase) GetQueryProfile(ctx context.Context) (*presentations.QueryProfileResponse, error) {
+//nolint:gocognit
+func (u *queryProfileUsecase) GetQueryProfile(
+	ctx context.Context,
+	req presentations.QueryProfileRequest,
+) (*presentations.QueryProfileResponse, error) {
 	var (
 		lf = logger.NewFields(
 			logger.EventName("usecase.query.profile"),
@@ -26,7 +30,8 @@ func (u *queryProfileUsecase) GetQueryProfile(ctx context.Context) (*presentatio
 		userPreference   repository.UserPreference
 		userSubscription *repository.UserSubscription
 		authInfo         = helper.AuthInfoFromContext(ctx)
-		key              = fmt.Sprintf("user:query:%d", authInfo.UserID)
+		keyUserQuery     = fmt.Sprintf("user:query:%d", authInfo.UserID)
+		keyRecentQuery   = fmt.Sprintf("user:recent:query:%d", authInfo.UserID)
 		result           *presentations.QueryProfileResponse
 	)
 
@@ -76,7 +81,38 @@ func (u *queryProfileUsecase) GetQueryProfile(ctx context.Context) (*presentatio
 		return nil, err
 	}
 
-	existQuery, err := u.kvs.Get(ctx, key)
+	recentQuery, err := u.kvs.Get(ctx, keyRecentQuery)
+	if err != nil {
+		logger.ErrorWithContext(ctx, err.Error(), lf...)
+		return nil, err
+	}
+
+	if recentQuery != nil {
+		var recentQueryUserID int64
+		err = json.Unmarshal([]byte(recentQuery.(string)), &recentQueryUserID)
+
+		if err != nil {
+			logger.ErrorWithContext(ctx, err.Error(), lf...)
+			return nil, err
+		}
+
+		if req.Action == "" {
+			return nil, fmt.Errorf("you need to specify action")
+		}
+
+		err = u.userActionHistoryRepo.Store(ctx, repository.UserActionHistory{
+			UserID:    authInfo.UserID,
+			ProfileID: recentQueryUserID,
+			Action:    req.Action,
+		})
+
+		if err != nil {
+			logger.ErrorWithContext(ctx, err.Error(), lf...)
+			return nil, err
+		}
+	}
+
+	existQuery, err := u.kvs.Get(ctx, keyUserQuery)
 
 	if err != nil {
 		logger.ErrorWithContext(ctx, err.Error(), lf...)
@@ -110,15 +146,35 @@ func (u *queryProfileUsecase) GetQueryProfile(ctx context.Context) (*presentatio
 
 		existUserIDs = append(existUserIDs, user.ID)
 
-		b, err := json.Marshal(existUserIDs)
+		byteExistUserIDs, err := json.Marshal(existUserIDs)
 
 		if err != nil {
 			logger.ErrorWithContext(ctx, err.Error(), lf...)
 			return nil, err
 		}
 
-		_, err = u.kvs.Set(ctx, key, b, time.Duration(24)*time.Hour)
+		_, err = u.kvs.Set(ctx, keyUserQuery, byteExistUserIDs, time.Duration(24)*time.Hour)
 
+		if err != nil {
+			logger.ErrorWithContext(ctx, err.Error(), lf...)
+			return nil, err
+		}
+
+		byteUserID, err := json.Marshal(user.ID)
+
+		if err != nil {
+			logger.ErrorWithContext(ctx, err.Error(), lf...)
+			return nil, err
+		}
+
+		_, err = u.kvs.Set(ctx, keyRecentQuery, byteUserID, time.Duration(24)*time.Hour)
+
+		if err != nil {
+			logger.ErrorWithContext(ctx, err.Error(), lf...)
+			return nil, err
+		}
+
+		profileImages, err := u.userImageRepo.FindByUserID(ctx, user.ID)
 		if err != nil {
 			logger.ErrorWithContext(ctx, err.Error(), lf...)
 			return nil, err
@@ -132,11 +188,23 @@ func (u *queryProfileUsecase) GetQueryProfile(ctx context.Context) (*presentatio
 			Intend:    user.Intend,
 		}
 
+		if len(profileImages) > 0 {
+			for _, image := range profileImages {
+				signedURL, err := u.storage.GetSignedURL(u.cfg.Cloudinary.Bucket, image.ImageURL)
+				if err != nil {
+					logger.ErrorWithContext(ctx, "error get signed url", lf...)
+					return nil, err
+				}
+
+				result.Images = append(result.Images, signedURL.String())
+			}
+		}
+
 		break
 	}
 
 	if result == nil {
-		return nil, fmt.Errorf("no user found")
+		return nil, fmt.Errorf("no more user match with your preference")
 	}
 
 	return result, nil

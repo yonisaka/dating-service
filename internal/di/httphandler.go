@@ -36,3 +36,8 @@ func GetSubscribeHandler() httphandler.Handler {
 func GetUploadImageHandler() httphandler.Handler {
 	return httphandler.NewUploadImageHandler(GetProfileUsecase())
 }
+
+// GetPreferenceHandler is a function to get preference handler
+func GetPreferenceHandler() httphandler.Handler {
+	return httphandler.NewPreferenceHandler(GetProfileUsecase())
+}

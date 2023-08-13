@@ -35,3 +35,8 @@ func GetUserSubscriptionRepo() repository.UserSubscriptionRepo {
 func GetUserImageRepo() repository.UserImageRepo {
 	return datastore.NewUserImageRepo(GetBaseRepo())
 }
+
+// GetUserActionHistoryRepo returns UserActionHistoryRepo instance.
+func GetUserActionHistoryRepo() repository.UserActionHistoryRepo {
+	return datastore.NewUserActionHistoryRepo(GetBaseRepo())
+}

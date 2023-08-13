@@ -3,33 +3,47 @@ package usecases
 import (
 	"context"
 
+	"github.com/yonisaka/dating-service/config"
 	"github.com/yonisaka/dating-service/internal/entities/repository"
 	"github.com/yonisaka/dating-service/internal/presentations"
 	"github.com/yonisaka/dating-service/pkg/kvs"
+	"github.com/yonisaka/dating-service/pkg/storage"
 )
 
 // QueryProfileUsecase is an interface for auth usecase
 type QueryProfileUsecase interface {
-	GetQueryProfile(ctx context.Context) (*presentations.QueryProfileResponse, error)
+	GetQueryProfile(ctx context.Context, req presentations.QueryProfileRequest) (*presentations.QueryProfileResponse, error)
 }
 
 func NewQueryProfileUsecase(
+	cfg *config.Config,
 	userRepo repository.UserRepo,
 	userPreferenceRepo repository.UserPreferenceRepo,
 	userSubscriptionRepo repository.UserSubscriptionRepo,
+	userActionHistoryRepo repository.UserActionHistoryRepo,
+	userImageRepo repository.UserImageRepo,
 	kvs kvs.Client,
+	storage storage.Storage,
 ) QueryProfileUsecase {
 	return &queryProfileUsecase{
-		userRepo:             userRepo,
-		userPreferenceRepo:   userPreferenceRepo,
-		userSubscriptionRepo: userSubscriptionRepo,
-		kvs:                  kvs,
+		cfg:                   cfg,
+		userRepo:              userRepo,
+		userPreferenceRepo:    userPreferenceRepo,
+		userSubscriptionRepo:  userSubscriptionRepo,
+		userActionHistoryRepo: userActionHistoryRepo,
+		userImageRepo:         userImageRepo,
+		kvs:                   kvs,
+		storage:               storage,
 	}
 }
 
 type queryProfileUsecase struct {
-	userRepo             repository.UserRepo
-	userPreferenceRepo   repository.UserPreferenceRepo
-	userSubscriptionRepo repository.UserSubscriptionRepo
-	kvs                  kvs.Client
+	cfg                   *config.Config
+	userRepo              repository.UserRepo
+	userPreferenceRepo    repository.UserPreferenceRepo
+	userSubscriptionRepo  repository.UserSubscriptionRepo
+	userActionHistoryRepo repository.UserActionHistoryRepo
+	userImageRepo         repository.UserImageRepo
+	kvs                   kvs.Client
+	storage               storage.Storage
 }

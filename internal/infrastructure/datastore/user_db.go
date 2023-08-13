@@ -52,6 +52,8 @@ func (r *userRepo) Find(ctx context.Context, preferences ...repository.UserPrefe
 		query += fmt.Sprintf(" AND intend = '%s'", userPreference.Intend)
 	}
 
+	query += " ORDER BY RANDOM()"
+
 	rows, err := r.dbMaster.Query(ctx, query)
 	if err != nil {
 		return nil, fmt.Errorf("failed to query: %w", err)
