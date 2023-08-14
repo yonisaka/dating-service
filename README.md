@@ -22,7 +22,7 @@
 
 ## Entity Relationship Diagram
 
-<img src="https://github.com/yonisaka/dating-service/blob/main/docs/erd.png?raw=true" width="500"/>
+<img src="https://github.com/yonisaka/dating-service/blob/main/docs/erd.png?raw=true"/>
 
 ## Installation
 
@@ -49,6 +49,7 @@ $ make install
 ```sh
 $ cp .env.example .env
 ```
+**_note: for cloudinary env, will be provided by separate file_**
 
 ### 4. Run Database Migration
 
@@ -77,3 +78,9 @@ $ make test
 ```sh
 $ make lint
 ```
+
+### This project has GitHub Actions CI to do some automation such as:
+
+* [lint](.github/workflows/lint.yml): check the code style.
+* [test](.github/workflows/test.yml): run unit testing and uploaded code coverage artifact.
+* [deployment](.github/workflows/deployment.yml): deploy to GCE instance, setup only because not provided by the client.
