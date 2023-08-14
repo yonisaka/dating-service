@@ -1,0 +1,603 @@
+{
+	"info": {
+		"_postman_id": "2a5b9629-41d1-4729-b33e-a2927e3fb47c",
+		"name": "dealls",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25760503",
+		"_collection_link": "https://privyid.postman.co/workspace/Yoni-Workspace~df1465dc-c08f-4cd6-aed6-204d05c2429c/collection/25760503-2a5b9629-41d1-4729-b33e-a2927e3fb47c?action=share&source=collection_link&creator=25760503"
+	},
+	"item": [
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"first_name\": \"{{$randomFirstName}}\",\n    \"last_name\": \"{{$randomLastName}}\",\n    \"email\": \"{{$randomEmail}}\",\n    \"phone\": \"{{$randomPhoneNumber}}\",\n    \"password\": \"password\",\n    \"dob\": \"1999-12-08\",\n    \"gender\": \"man\",\n    \"intend\": \"new friends\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/register",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"register"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Register",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"first_name\": \"{{$randomFirstName}}\",\n    \"last_name\": \"{{$randomLastName}}\",\n    \"email\": \"{{$randomEmail}}\",\n    \"phone\": \"{{$randomPhoneNumber}}\",\n    \"password\": \"password\",\n    \"dob\": \"1999-12-08\",\n    \"gender\": \"man\",\n    \"intend\": \"new friends\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/register",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"register"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 14 Aug 2023 15:16:22 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "202"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 200,\n    \"message\": \"Success Register\",\n    \"data\": {\n        \"first_name\": \"Gunner\",\n        \"last_name\": \"Mitchell\",\n        \"email\": \"Thaddeus_Bednar69@hotmail.com\",\n        \"phone\": \"857-872-0893\",\n        \"dob\": \"1999-12-08 00:00:00\",\n        \"gender\": \"man\"\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"yonisaka0@gmail.com\",\n    \"password\": \"password\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/login",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"login"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Login",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"yonisaka0@gmail.com\",\n    \"password\": \"password\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"login"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 14 Aug 2023 15:16:33 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "628"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 200,\n    \"message\": \"success login\",\n    \"data\": {\n        \"access_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJkdGlkIjoiNjVmMzE5ODQtZWQ0ZS00MDU3LWIwZWUtNDFkMTUzY2VlNWFlIiwiZXhwaXJ5X3RpbWUiOiIyMDIzLTA4LTE1VDAxOjE2OjMzLjA3NDI2KzA3OjAwIiwidXNlcl9pZCI6MX0.JVLRVAC3k6_542EliNaxKaqeLfxKez4WOHlNvOujvxs\",\n        \"refresh_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJkdGlkIjoiYzdjMDUyN2EtMGUwMC00MTYyLWI3MDYtZWIzNmIwYjIzNDU4IiwicmVmcmVzaF9leHBpcnlfdGltZSI6IjIwMjMtMDktMTNUMjI6MTY6MzMuMDc1MDg3KzA3OjAwIiwidXNlcl9pZCI6MX0.oMFdxuQUah-7ezpFAQzllBf6-7x2NNU7LPJw1mFdxRE\",\n        \"expired_at\": \"2023-08-15 01:16:33\"\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Profile",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/v1/profile",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"profile"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Login Copy",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/profile",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"profile"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 14 Aug 2023 15:16:40 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "681"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 200,\n    \"message\": \"success get profile\",\n    \"data\": {\n        \"first_name\": \"Yoni\",\n        \"last_name\": \"Saka\",\n        \"status\": \"verified\",\n        \"email\": \"yonisaka0@gmail.com\",\n        \"phone\": \"123-456-7890\",\n        \"dob\": \"1990-01-15 00:00:00\",\n        \"gender\": \"man\",\n        \"intend\": \"long-term partner\",\n        \"images\": [\n            \"https://res.cloudinary.com/djpxrzz39/image/upload/v1/user/b39c3e70-9a6a-4ac5-ae34-d7dca46c65be?_a=AQAGSfR\",\n            \"https://res.cloudinary.com/djpxrzz39/image/upload/v1/user/1e995e03-3aec-4f04-98dd-063ec911a582?_a=AQAGSfR\",\n            \"https://res.cloudinary.com/djpxrzz39/image/upload/v1/user/fed41671-5514-4793-a6ae-6f34484710e5?_a=AQAGSfR\",\n            \"https://res.cloudinary.com/djpxrzz39/image/upload/v1/user/fed41671-5514-4793-a6ae-6f34484710e5?_a=AQAGSfR\"\n        ]\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Query Profile",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bearer_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/v1/query-profile",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"query-profile"
+					],
+					"query": [
+						{
+							"key": "action",
+							"value": "pass",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Query Profile",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/query-profile",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"query-profile"
+							],
+							"query": [
+								{
+									"key": "action",
+									"value": "pass",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 14 Aug 2023 12:01:44 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "269"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 200,\n    \"message\": \"success get query profile\",\n    \"data\": {\n        \"first_name\": \"Sarah\",\n        \"last_name\": \"Jones\",\n        \"age\": 25,\n        \"gender\": \"woman\",\n        \"intend\": \"new friends\",\n        \"images\": [\n            \"https://res.cloudinary.com/djpxrzz39/image/upload/v1/user/fed41671-5514-4793-a6ae-6f34484710e5?_a=AQAGSfR\"\n        ]\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Get Action Histories",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bearer_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/v1/action-history",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"action-history"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Get Action Histories",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/action-history",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"action-history"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 14 Aug 2023 12:02:20 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1300"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 200,\n    \"message\": \"success get action history\",\n    \"data\": [\n        {\n            \"first_name\": \"Sophia\",\n            \"last_name\": \"Scott\",\n            \"age\": 28,\n            \"action\": \"pass\",\n            \"updated_at\": \"2023-08-13 15:39:29\"\n        },\n        {\n            \"first_name\": \"Sarah\",\n            \"last_name\": \"Jones\",\n            \"age\": 25,\n            \"action\": \"like\",\n            \"updated_at\": \"2023-08-13 15:39:25\"\n        },\n        {\n            \"first_name\": \"Ava\",\n            \"last_name\": \"Young\",\n            \"age\": 26,\n            \"action\": \"like\",\n            \"updated_at\": \"2023-08-13 15:39:24\"\n        },\n        {\n            \"first_name\": \"Sofia\",\n            \"last_name\": \"King\",\n            \"age\": 27,\n            \"action\": \"like\",\n            \"updated_at\": \"2023-08-13 15:39:23\"\n        },\n        {\n            \"first_name\": \"Mia\",\n            \"last_name\": \"Harris\",\n            \"age\": 27,\n            \"action\": \"like\",\n            \"updated_at\": \"2023-08-13 15:39:22\"\n        },\n        {\n            \"first_name\": \"Sophia\",\n            \"last_name\": \"Taylor\",\n            \"age\": 25,\n            \"action\": \"pass\",\n            \"updated_at\": \"2023-08-13 15:38:47\"\n        },\n        {\n            \"first_name\": \"Emily\",\n            \"last_name\": \"Williams\",\n            \"age\": 28,\n            \"action\": \"pass\",\n            \"updated_at\": \"2023-08-13 15:23:11\"\n        },\n        {\n            \"first_name\": \"Avery\",\n            \"last_name\": \"Clark\",\n            \"age\": 28,\n            \"action\": \"pass\",\n            \"updated_at\": \"2023-08-13 15:23:08\"\n        },\n        {\n            \"first_name\": \"Ava\",\n            \"last_name\": \"Moore\",\n            \"age\": 28,\n            \"action\": \"pass\",\n            \"updated_at\": \"2023-08-13 15:23:08\"\n        },\n        {\n            \"first_name\": \"Amelia\",\n            \"last_name\": \"Hall\",\n            \"age\": 27,\n            \"action\": \"pass\",\n            \"updated_at\": \"2023-08-13 15:23:06\"\n        },\n        {\n            \"first_name\": \"Isabella\",\n            \"last_name\": \"Wright\",\n            \"age\": 27,\n            \"action\": \"pass\",\n            \"updated_at\": \"2023-08-13 15:23:04\"\n        },\n        {\n            \"first_name\": \"Ava\",\n            \"last_name\": \"Turner\",\n            \"age\": 24,\n            \"action\": \"pass\",\n            \"updated_at\": \"2023-08-13 15:23:02\"\n        }\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "Subscribe",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bearer_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/v1/subscribe",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"subscribe"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Subscribe",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/subscribe",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"subscribe"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 14 Aug 2023 15:16:58 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "146"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 200,\n    \"message\": \"success subscribe\",\n    \"data\": {\n        \"subscription_code\": \"d8262581-d034-4329-9246-72ffbae965ee\",\n        \"expired_at\": \"2023-09-14 22:16:58\"\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Set Preference",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bearer_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"min_age\": 18,\n    \"max_age\": 30,\n    \"use_intend\": false\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/preference",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"preference"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Set Preference",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"min_age\": 18,\n    \"max_age\": 30,\n    \"use_intend\": false\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/preference",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"preference"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 14 Aug 2023 12:01:23 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "48"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 200,\n    \"message\": \"success set preference\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Upload Images",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bearer_token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"images\": [\n        \"{{image_base64}}\",\n        \"{{image_base64}}\",\n        \"{{image_base64}}\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/api/v1/upload-image",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"upload-image"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Upload Images",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"images\": [\n        \"{{image_base64}}\",\n        \"{{image_base64}}\",\n        \"{{image_base64}}\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/upload-image",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"upload-image"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 14 Aug 2023 15:17:15 GMT"
+						},
+						{
+							"key": "Content-Length",
+							"value": "47"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"code\": 200,\n    \"message\": \"success upload images\"\n}"
+				}
+			]
+		}
+	]
+}

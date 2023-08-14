@@ -2,19 +2,20 @@
 
 ## Project Summary
 
-| Item                      | Description                                                                                                          |
-|---------------------------|----------------------------------------------------------------------------------------------------------------------|
-| Golang Version            | [1.20](https://golang.org/doc/go1.20)                                                                                |
-| Object Storage            | [Cloudinary](https://cloudinary.com)                                                                                 |
-| moq                       | [mockgen](https://github.com/golang/mock)                                                                            |
-| Linter                    | [GolangCI-Lint](https://github.com/golangci/golangci-lint)                                                           |
-| Testing                   | [testing](https://golang.org/pkg/testing) and [testify/assert](https://godoc.org/github.com/stretchr/testify/assert) |
-| Application Architecture  | [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)                   |
-| Directory Structure       | [Standard Go Project Layout](https://github.com/golang-standards/project-layout)                                     |
-| CI (Lint, Test, Generate) | [GitHubActions](https://github.com/features/actions)                                                                 |
-| Logger                    | [logrus](https://github.com/sirupsen/logrus)                                                                         |
-| Database                  | [postgres](https://www.postgresql.org/)                                                                              |
-| Database Migration        | [goose](https://github.com/pressly/goose)                                                                            |
+| Item                        | Description                                                                                                          |
+|-----------------------------|----------------------------------------------------------------------------------------------------------------------|
+| Golang Version              | [1.20](https://golang.org/doc/go1.20)                                                                                |
+| Object Storage              | [Cloudinary](https://cloudinary.com)                                                                                 |
+| moq                         | [mockgen](https://github.com/golang/mock)                                                                            |
+| Linter                      | [GolangCI-Lint](https://github.com/golangci/golangci-lint)                                                           |
+| Testing                     | [testing](https://golang.org/pkg/testing) and [testify/assert](https://godoc.org/github.com/stretchr/testify/assert) |
+| Application Architecture    | [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)                   |
+| Directory Structure         | [Standard Go Project Layout](https://github.com/golang-standards/project-layout)                                     |
+| CI (Lint, Test, Deployment) | [GitHubActions](https://github.com/features/actions)                                                                 |
+| Logger                      | [logrus](https://github.com/sirupsen/logrus)                                                                         |
+| Database                    | [postgres](https://www.postgresql.org/)                                                                              |
+| Database Migration          | [goose](https://github.com/pressly/goose)                                                                            |
+| Key Value Storage           | [redis](https://redis.io/)                                                                                           |
 
 ## Sequence Diagram
 
