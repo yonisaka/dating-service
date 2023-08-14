@@ -2,6 +2,9 @@ package repository
 
 import "context"
 
+//go:generate rm -f ./user_preference_mock.go
+//go:generate mockgen -destination user_preference_mock.go -package repository -mock_names UserPreferenceRepo=GoMockUserPreferenceRepo -source user_preference.go
+
 // UserPreference is a user preference entity.
 type UserPreference struct {
 	ID        int64

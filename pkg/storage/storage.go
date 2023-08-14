@@ -9,6 +9,9 @@ import (
 
 var ErrNotFound = fmt.Errorf("storage object not found")
 
+//go:generate rm -f ./storage_mock.go
+//go:generate mockgen -destination storage_mock.go -package storage -mock_names Storage=GoMockStorage -source storage.go
+
 // Storage defines the minimum interface for a blob storage system.
 type Storage interface {
 	// Put creates or overwrites an object in the storage system.

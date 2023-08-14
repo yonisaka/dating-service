@@ -11,6 +11,9 @@ import (
 	"github.com/yonisaka/dating-service/config"
 )
 
+//go:generate rm -f ./auth_mock.go
+//go:generate mockgen -destination auth_mock.go -package auth -mock_names Auth=GoMockAuth -source auth.go
+
 type TokenDetails struct {
 	AccessToken  string
 	RefreshToken string

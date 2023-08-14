@@ -5,6 +5,9 @@ import (
 	"time"
 )
 
+//go:generate rm -f ./user_subscription_mock.go
+//go:generate mockgen -destination user_subscription_mock.go -package repository -mock_names UserSubscriptionRepo=GoMockUserSubscriptionRepo -source user_subscription.go
+
 // UserSubscription is a user subscription entity.
 type UserSubscription struct {
 	ID               int64

@@ -21,10 +21,10 @@ func NewUserRepo(base *BaseRepo) repository.UserRepo {
 }
 
 // Find returns a list of users.
-func (r *userRepo) Find(ctx context.Context, preferences ...repository.UserPreference) ([]*repository.User, error) {
+func (r *userRepo) Find(ctx context.Context, preferences ...repository.UserPreference) ([]repository.User, error) {
 	var (
 		userPreference repository.UserPreference
-		users          []*repository.User
+		users          []repository.User
 	)
 
 	query := `
@@ -73,7 +73,7 @@ func (r *userRepo) Find(ctx context.Context, preferences ...repository.UserPrefe
 			return nil, fmt.Errorf("failed to scan: %w", err)
 		}
 
-		users = append(users, &user)
+		users = append(users, user)
 	}
 
 	return users, nil

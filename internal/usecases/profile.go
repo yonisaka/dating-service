@@ -160,7 +160,7 @@ func (u *profileUsecase) UploadImages(ctx context.Context, req presentations.Upl
 func (u *profileUsecase) SetPreference(ctx context.Context, req presentations.UserPreferenceRequest) error {
 	var (
 		lf = logger.NewFields(
-			logger.EventName("usecase.upload_images"),
+			logger.EventName("usecase.set_preference"),
 		)
 		authInfo = helper.AuthInfoFromContext(ctx)
 	)

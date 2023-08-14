@@ -1,0 +1,1607 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>datastore: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">github.com/yonisaka/dating-service/internal/infrastructure/datastore/base_db.go (0.0%)</option>
+				
+				<option value="file1">github.com/yonisaka/dating-service/internal/infrastructure/datastore/health_db.go (0.0%)</option>
+				
+				<option value="file2">github.com/yonisaka/dating-service/internal/infrastructure/datastore/user_action_history_db.go (0.0%)</option>
+				
+				<option value="file3">github.com/yonisaka/dating-service/internal/infrastructure/datastore/user_db.go (0.0%)</option>
+				
+				<option value="file4">github.com/yonisaka/dating-service/internal/infrastructure/datastore/user_image_db.go (0.0%)</option>
+				
+				<option value="file5">github.com/yonisaka/dating-service/internal/infrastructure/datastore/user_preference_db.go (0.0%)</option>
+				
+				<option value="file6">github.com/yonisaka/dating-service/internal/infrastructure/datastore/user_subscription.go (0.0%)</option>
+				
+				<option value="file7">github.com/yonisaka/dating-service/internal/usecases/action_history.go (66.7%)</option>
+				
+				<option value="file8">github.com/yonisaka/dating-service/internal/usecases/action_history_uc.go (100.0%)</option>
+				
+				<option value="file9">github.com/yonisaka/dating-service/internal/usecases/auth.go (64.7%)</option>
+				
+				<option value="file10">github.com/yonisaka/dating-service/internal/usecases/auth_uc.go (100.0%)</option>
+				
+				<option value="file11">github.com/yonisaka/dating-service/internal/usecases/health.go (100.0%)</option>
+				
+				<option value="file12">github.com/yonisaka/dating-service/internal/usecases/health_uc.go (100.0%)</option>
+				
+				<option value="file13">github.com/yonisaka/dating-service/internal/usecases/profile.go (70.6%)</option>
+				
+				<option value="file14">github.com/yonisaka/dating-service/internal/usecases/profile_uc.go (100.0%)</option>
+				
+				<option value="file15">github.com/yonisaka/dating-service/internal/usecases/query_profile.go (55.2%)</option>
+				
+				<option value="file16">github.com/yonisaka/dating-service/internal/usecases/query_profile_uc.go (100.0%)</option>
+				
+				<option value="file17">github.com/yonisaka/dating-service/internal/usecases/subscribe.go (69.2%)</option>
+				
+				<option value="file18">github.com/yonisaka/dating-service/internal/usecases/subscribe_uc.go (100.0%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">no coverage</span>
+				<span class="cov1">low coverage</span>
+				<span class="cov2">*</span>
+				<span class="cov3">*</span>
+				<span class="cov4">*</span>
+				<span class="cov5">*</span>
+				<span class="cov6">*</span>
+				<span class="cov7">*</span>
+				<span class="cov8">*</span>
+				<span class="cov9">*</span>
+				<span class="cov10">high coverage</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package datastore
+
+import (
+        "context"
+        "fmt"
+        "io"
+        "log"
+        "sync"
+
+        "github.com/jackc/pgx/v5/pgxpool"
+        "github.com/yonisaka/dating-service/config"
+        "github.com/yonisaka/dating-service/pkg/di"
+)
+
+var (
+        poolMasterOnce sync.Once
+        poolSlaveOnce  sync.Once
+        poolMaster     *pgxpool.Pool
+        poolSlave      *pgxpool.Pool
+)
+
+type wrapPool struct {
+        pool *pgxpool.Pool
+}
+
+func (w *wrapPool) Close() error <span class="cov0" title="0">{
+        w.pool.Close()
+        return nil
+}</span>
+
+// NewBaseRepo returns a base repository.
+func NewBaseRepo(dbMaster, dbSlave *pgxpool.Pool) *BaseRepo <span class="cov0" title="0">{
+        return &amp;BaseRepo{dbMaster: dbMaster, dbSlave: dbSlave}
+}</span>
+
+// BaseRepo is a base repository.
+type BaseRepo struct {
+        dbMaster *pgxpool.Pool
+        dbSlave  *pgxpool.Pool
+}
+
+func getConnString(cfg *config.DB) string <span class="cov0" title="0">{
+        return fmt.Sprintf("postgres://%s:%s@%s/%s?sslmode=disable",
+                cfg.User,
+                cfg.Password,
+                fmt.Sprintf("%s:%d", cfg.Host, cfg.Port),
+                cfg.DB,
+        )
+}</span>
+
+// GetDatabaseMaster returns postgresql Pool for Master.
+func GetDatabaseMaster(cfg *config.DB) *pgxpool.Pool <span class="cov0" title="0">{
+        poolMasterOnce.Do(func() </span><span class="cov0" title="0">{
+                ctx := context.Background()
+
+                var err error
+
+                connString := getConnString(cfg)
+
+                // Use default config.
+                poolMaster, err = pgxpool.New(ctx, connString)
+                if err != nil </span><span class="cov0" title="0">{
+                        log.Fatalf("failed to connect to timescaleDB pool: %v", err)
+                }</span>
+
+                <span class="cov0" title="0">err = poolMaster.Ping(ctx)
+                if err != nil </span><span class="cov0" title="0">{
+                        log.Fatalf("failed to ping database: %v", err)
+                }</span>
+
+                <span class="cov0" title="0">var c io.Closer = &amp;wrapPool{
+                        pool: poolMaster,
+                }
+
+                di.RegisterCloser("TimescaleDB Master Connection", c)</span>
+        })
+
+        <span class="cov0" title="0">return poolMaster</span>
+}
+
+// GetDatabaseSlave returns postgresql Pool for Slave.
+func GetDatabaseSlave(cfg *config.DB) *pgxpool.Pool <span class="cov0" title="0">{
+        poolSlaveOnce.Do(func() </span><span class="cov0" title="0">{
+                ctx := context.Background()
+
+                var err error
+
+                connString := getConnString(cfg)
+
+                // Use default config.
+                poolSlave, err = pgxpool.New(ctx, connString)
+                if err != nil </span><span class="cov0" title="0">{
+                        log.Fatalf("failed to connect to timescaleDB pool: %v", err)
+                }</span>
+
+                <span class="cov0" title="0">err = poolSlave.Ping(ctx)
+                if err != nil </span><span class="cov0" title="0">{
+                        log.Fatalf("failed to ping database: %v", err)
+                }</span>
+
+                <span class="cov0" title="0">var c io.Closer = &amp;wrapPool{
+                        pool: poolSlave,
+                }
+
+                di.RegisterCloser("TimescaleDB Slave Connection", c)</span>
+        })
+
+        <span class="cov0" title="0">return poolSlave</span>
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package datastore
+
+import (
+        "context"
+
+        "github.com/yonisaka/dating-service/internal/entities/repository"
+        "golang.org/x/sync/errgroup"
+)
+
+// healthRepo is a health repository.
+type healthRepo struct {
+        *BaseRepo
+}
+
+// NewHealthRepo returns a health repository.
+func NewHealthRepo(base *BaseRepo) repository.HealthRepo <span class="cov0" title="0">{
+        return &amp;healthRepo{
+                BaseRepo: base,
+        }
+}</span>
+
+// GetLiveness returns liveness.
+func (r *healthRepo) GetLiveness(ctx context.Context) error <span class="cov0" title="0">{
+        var err error
+
+        group, _ := errgroup.WithContext(ctx)
+
+        group.Go(func() error </span><span class="cov0" title="0">{
+                return r.dbSlave.Ping(ctx)
+        }</span>)
+
+        <span class="cov0" title="0">group.Go(func() error </span><span class="cov0" title="0">{
+                _, err = r.dbSlave.Query(ctx, "SELECT 1")
+                return err
+        }</span>)
+
+        <span class="cov0" title="0">group.Go(func() error </span><span class="cov0" title="0">{
+                return r.dbMaster.Ping(ctx)
+        }</span>)
+
+        <span class="cov0" title="0">group.Go(func() error </span><span class="cov0" title="0">{
+                _, err = r.dbMaster.Query(ctx, "SELECT 1")
+                return err
+        }</span>)
+
+        <span class="cov0" title="0">if err := group.Wait(); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package datastore
+
+import (
+        "context"
+        "fmt"
+
+        "github.com/jackc/pgx/v5"
+        "github.com/yonisaka/dating-service/internal/entities/repository"
+)
+
+// userActionHistory is a struct
+type userActionHistory struct {
+        *BaseRepo
+}
+
+// NewUserActionHistoryRepo is a function
+func NewUserActionHistoryRepo(base *BaseRepo) repository.UserActionHistoryRepo <span class="cov0" title="0">{
+        return &amp;userActionHistory{
+                BaseRepo: base,
+        }
+}</span>
+
+// FindByUserID is a method
+func (r *userActionHistory) FindByUserID(ctx context.Context, userID int64) ([]repository.UserActionHistory, error) <span class="cov0" title="0">{
+        var actionHistories []repository.UserActionHistory
+
+        query := `
+                SELECT id, user_id, profile_id, action, created_at, updated_at
+                FROM user_action_history
+                WHERE user_id = $1
+                ORDER BY updated_at DESC
+        `
+
+        rows, err := r.dbMaster.Query(ctx, query, userID)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("failed to query: %w", err)
+        }</span>
+        <span class="cov0" title="0">defer rows.Close()
+
+        for rows.Next() </span><span class="cov0" title="0">{
+                var actionHistory repository.UserActionHistory
+                if err := rows.Scan(
+                        &amp;actionHistory.ID,
+                        &amp;actionHistory.UserID,
+                        &amp;actionHistory.ProfileID,
+                        &amp;actionHistory.Action,
+                        &amp;actionHistory.CreatedAt,
+                        &amp;actionHistory.UpdatedAt,
+                ); err != nil </span><span class="cov0" title="0">{
+                        return nil, fmt.Errorf("failed to scan: %w", err)
+                }</span>
+
+                <span class="cov0" title="0">actionHistories = append(actionHistories, actionHistory)</span>
+        }
+
+        <span class="cov0" title="0">if err == pgx.ErrNoRows </span><span class="cov0" title="0">{
+                return nil, nil
+        }</span>
+
+        <span class="cov0" title="0">if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return actionHistories, nil</span>
+}
+
+// Store is a method
+func (r *userActionHistory) Store(ctx context.Context, history repository.UserActionHistory) error <span class="cov0" title="0">{
+        query := `
+                INSERT INTO user_action_history (user_id, profile_id, action, created_at, updated_at)
+                VALUES ($1, $2, $3, NOW(), NOW())
+                ON CONFLICT (user_id, profile_id) 
+                DO UPDATE SET action = $3, updated_at = NOW()
+        `
+
+        _, err := r.dbSlave.Exec(ctx, query, history.UserID, history.ProfileID, history.Action)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package datastore
+
+import (
+        "context"
+        "fmt"
+
+        "github.com/jackc/pgx/v5"
+        "github.com/yonisaka/dating-service/internal/entities/repository"
+)
+
+// userRepo is a user repository.
+type userRepo struct {
+        *BaseRepo
+}
+
+// NewUserRepo returns a user repository.
+func NewUserRepo(base *BaseRepo) repository.UserRepo <span class="cov0" title="0">{
+        return &amp;userRepo{
+                BaseRepo: base,
+        }
+}</span>
+
+// Find returns a list of users.
+func (r *userRepo) Find(ctx context.Context, preferences ...repository.UserPreference) ([]repository.User, error) <span class="cov0" title="0">{
+        var (
+                userPreference repository.UserPreference
+                users          []repository.User
+        )
+
+        query := `
+                SELECT id, first_name, last_name, dob, gender, intend
+                FROM users
+        `
+
+        if len(preferences) &gt; 0 </span><span class="cov0" title="0">{
+                userPreference = preferences[0]
+        }</span>
+
+        <span class="cov0" title="0">if userPreference.Gender != "" </span><span class="cov0" title="0">{
+                query += fmt.Sprintf(" WHERE gender = '%s'", userPreference.Gender)
+        }</span>
+
+        <span class="cov0" title="0">if userPreference.MinAge != 0 &amp;&amp; userPreference.MaxAge != 0 </span><span class="cov0" title="0">{
+                query += fmt.Sprintf(
+                        " AND dob BETWEEN NOW() - INTERVAL '%d years' AND NOW() - INTERVAL '%d years'",
+                        userPreference.MaxAge,
+                        userPreference.MinAge,
+                )
+        }</span>
+
+        <span class="cov0" title="0">if userPreference.UseIntend </span><span class="cov0" title="0">{
+                query += fmt.Sprintf(" AND intend = '%s'", userPreference.Intend)
+        }</span>
+
+        <span class="cov0" title="0">query += " ORDER BY RANDOM()"
+
+        rows, err := r.dbMaster.Query(ctx, query)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("failed to query: %w", err)
+        }</span>
+        <span class="cov0" title="0">defer rows.Close()
+
+        for rows.Next() </span><span class="cov0" title="0">{
+                var user repository.User
+                if err := rows.Scan(
+                        &amp;user.ID,
+                        &amp;user.FirstName,
+                        &amp;user.LastName,
+                        &amp;user.Dob,
+                        &amp;user.Gender,
+                        &amp;user.Intend,
+                ); err != nil </span><span class="cov0" title="0">{
+                        return nil, fmt.Errorf("failed to scan: %w", err)
+                }</span>
+
+                <span class="cov0" title="0">users = append(users, user)</span>
+        }
+
+        <span class="cov0" title="0">return users, nil</span>
+}
+
+// FindByID returns a user by id.
+func (r *userRepo) FindByID(ctx context.Context, id int64) (*repository.User, error) <span class="cov0" title="0">{
+        query := `
+                SELECT id, first_name, last_name, email, phone, password, 
+                    dob, gender, intend, created_at, updated_at
+                FROM users
+                WHERE id = $1
+        `
+
+        return r.findOne(ctx, query, id)
+}</span>
+
+// FindByEmail returns a user by email.
+func (r *userRepo) FindByEmail(ctx context.Context, email string) (*repository.User, error) <span class="cov0" title="0">{
+        query := `
+                SELECT id, first_name, last_name, email, phone, password, 
+                    dob, gender, intend, created_at, updated_at
+                FROM users
+                WHERE email = $1
+        `
+
+        return r.findOne(ctx, query, email)
+}</span>
+
+func (r *userRepo) findOne(ctx context.Context, query string, param any) (*repository.User, error) <span class="cov0" title="0">{
+        var user repository.User
+        err := r.dbMaster.QueryRow(ctx, query, param).Scan(
+                &amp;user.ID,
+                &amp;user.FirstName,
+                &amp;user.LastName,
+                &amp;user.Email,
+                &amp;user.Phone,
+                &amp;user.Password,
+                &amp;user.Dob,
+                &amp;user.Gender,
+                &amp;user.Intend,
+                &amp;user.CreatedAt,
+                &amp;user.UpdatedAt,
+        )
+
+        if err == pgx.ErrNoRows </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("user not found")
+        }</span>
+
+        <span class="cov0" title="0">if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return &amp;user, nil</span>
+}
+
+// Store stores a user.
+func (r *userRepo) Store(ctx context.Context, user *repository.User) error <span class="cov0" title="0">{
+        query := `
+                INSERT INTO users (first_name, last_name, email, phone, password, dob, gender, intend, created_at, updated_at)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW(), NOW())
+        `
+        _, err := r.dbSlave.Exec(
+                ctx,
+                query,
+                user.FirstName,
+                user.LastName,
+                user.Email,
+                user.Phone,
+                user.Password,
+                user.Dob,
+                user.Gender,
+                user.Intend,
+        )
+
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package datastore
+
+import (
+        "context"
+        "fmt"
+
+        "github.com/jackc/pgx/v5"
+        "github.com/yonisaka/dating-service/internal/entities/repository"
+)
+
+// userImage is a struct
+type userImage struct {
+        *BaseRepo
+}
+
+// NewUserImageRepo is a function
+func NewUserImageRepo(base *BaseRepo) repository.UserImageRepo <span class="cov0" title="0">{
+        return &amp;userImage{
+                BaseRepo: base,
+        }
+}</span>
+
+// FindByUserID is a method
+func (r *userImage) FindByUserID(ctx context.Context, userID int64) ([]repository.UserImage, error) <span class="cov0" title="0">{
+        var userImages []repository.UserImage
+
+        query := `
+                SELECT id, user_id, image_url
+                FROM user_images
+                WHERE user_id = $1
+        `
+
+        rows, err := r.dbMaster.Query(ctx, query, userID)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("failed to query: %w", err)
+        }</span>
+        <span class="cov0" title="0">defer rows.Close()
+
+        for rows.Next() </span><span class="cov0" title="0">{
+                var userImage repository.UserImage
+                if err := rows.Scan(
+                        &amp;userImage.ID,
+                        &amp;userImage.UserID,
+                        &amp;userImage.ImageURL,
+                ); err != nil </span><span class="cov0" title="0">{
+                        return nil, fmt.Errorf("failed to scan: %w", err)
+                }</span>
+
+                <span class="cov0" title="0">userImages = append(userImages, userImage)</span>
+        }
+
+        <span class="cov0" title="0">if err == pgx.ErrNoRows </span><span class="cov0" title="0">{
+                return nil, nil
+        }</span>
+
+        <span class="cov0" title="0">if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return userImages, nil</span>
+}
+
+// StoreBulk is a method
+func (r *userImage) StoreBulk(ctx context.Context, images []repository.UserImage) error <span class="cov0" title="0">{
+        query := `
+                INSERT INTO user_images (user_id, image_url)
+                VALUES
+        `
+
+        for i, image := range images </span><span class="cov0" title="0">{
+                if i == 0 </span><span class="cov0" title="0">{
+                        query += fmt.Sprintf(" (%d, '%s')", image.UserID, image.ImageURL)
+                        continue</span>
+                }
+
+                <span class="cov0" title="0">query += fmt.Sprintf(", (%d, '%s')", image.UserID, image.ImageURL)</span>
+        }
+
+        <span class="cov0" title="0">_, err := r.dbSlave.Exec(ctx, query)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package datastore
+
+import (
+        "context"
+
+        "github.com/jackc/pgx/v5"
+        "github.com/yonisaka/dating-service/internal/entities/repository"
+)
+
+// userPreferenceRepo is a struct
+type userPreferenceRepo struct {
+        *BaseRepo
+}
+
+// NewUserPreferenceRepo is a function
+func NewUserPreferenceRepo(base *BaseRepo) repository.UserPreferenceRepo <span class="cov0" title="0">{
+        return &amp;userPreferenceRepo{
+                BaseRepo: base,
+        }
+}</span>
+
+// FindByUserID is a method
+func (r *userPreferenceRepo) FindByUserID(ctx context.Context, userID int64) (*repository.UserPreference, error) <span class="cov0" title="0">{
+        var userPreference repository.UserPreference
+
+        query := `
+                SELECT id, user_id, min_age, max_age, use_intend
+                FROM user_preferences
+                WHERE user_id = $1
+        `
+
+        err := r.dbMaster.QueryRow(ctx, query, userID).Scan(
+                &amp;userPreference.ID,
+                &amp;userPreference.UserID,
+                &amp;userPreference.MinAge,
+                &amp;userPreference.MaxAge,
+                &amp;userPreference.UseIntend,
+        )
+
+        if err == pgx.ErrNoRows </span><span class="cov0" title="0">{
+                return nil, nil //nolint:nilnil
+        }</span>
+
+        <span class="cov0" title="0">if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return &amp;userPreference, nil</span>
+}
+
+// Update is a method
+func (r *userPreferenceRepo) Update(ctx context.Context, userPreference repository.UserPreference) error <span class="cov0" title="0">{
+        query := `
+                INSERT INTO user_preferences (user_id, min_age, max_age, use_intend)
+                VALUES ($1, $2, $3, $4)
+                ON CONFLICT (user_id)
+                DO UPDATE SET min_age = $2, max_age = $3, use_intend = $4
+        `
+
+        _, err := r.dbMaster.Exec(ctx, query, userPreference.UserID, userPreference.MinAge, userPreference.MaxAge, userPreference.UseIntend)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">package datastore
+
+import (
+        "context"
+
+        "github.com/jackc/pgx/v5"
+        "github.com/yonisaka/dating-service/internal/entities/repository"
+)
+
+// userSubscriptionRepo is a struct
+type userSubscriptionRepo struct {
+        *BaseRepo
+}
+
+// NewUserSubscriptionRepo is a function
+func NewUserSubscriptionRepo(base *BaseRepo) repository.UserSubscriptionRepo <span class="cov0" title="0">{
+        return &amp;userSubscriptionRepo{
+                BaseRepo: base,
+        }
+}</span>
+
+// FindByUserID is a method
+func (r *userSubscriptionRepo) FindByUserID(ctx context.Context, userID int64) (*repository.UserSubscription, error) <span class="cov0" title="0">{
+        var userSubscription repository.UserSubscription
+
+        query := `
+                SELECT id, user_id, subscription_code, expired_at
+                FROM user_subscriptions
+                WHERE user_id = $1 AND expired_at &gt; NOW()
+        `
+
+        err := r.dbMaster.QueryRow(ctx, query, userID).Scan(
+                &amp;userSubscription.ID,
+                &amp;userSubscription.UserID,
+                &amp;userSubscription.SubscriptionCode,
+                &amp;userSubscription.ExpiredAt,
+        )
+
+        if err == pgx.ErrNoRows </span><span class="cov0" title="0">{
+                return nil, nil //nolint:nilnil
+        }</span>
+
+        <span class="cov0" title="0">if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">return &amp;userSubscription, nil</span>
+}
+
+// Store is a method
+func (r *userSubscriptionRepo) Store(ctx context.Context, userSubscription repository.UserSubscription) error <span class="cov0" title="0">{
+        query := `
+                INSERT INTO user_subscriptions (user_id, subscription_code, expired_at)
+                VALUES ($1, $2, $3)
+        `
+
+        _, err := r.dbMaster.Exec(ctx, query, userSubscription.UserID, userSubscription.SubscriptionCode, userSubscription.ExpiredAt)
+
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">package usecases
+
+import (
+        "context"
+        "time"
+
+        "github.com/yonisaka/dating-service/internal/helper"
+        "github.com/yonisaka/dating-service/internal/presentations"
+        "github.com/yonisaka/dating-service/pkg/logger"
+)
+
+func (u *actionHistoryUsecase) GetActionHistories(ctx context.Context) ([]presentations.ActionHistoryResponse, error) <span class="cov1" title="1">{
+        var (
+                lf = logger.NewFields(
+                        logger.EventName("usecase.action.history"),
+                )
+                authInfo = helper.AuthInfoFromContext(ctx)
+                result   = make([]presentations.ActionHistoryResponse, 0)
+        )
+
+        actionHistories, err := u.userActionHistoryRepo.FindByUserID(ctx, authInfo.UserID)
+        if err != nil </span><span class="cov0" title="0">{
+                logger.ErrorWithContext(ctx, err.Error(), lf...)
+                return nil, err
+        }</span>
+
+        <span class="cov1" title="1">for _, actionHistory := range actionHistories </span><span class="cov10" title="2">{
+                profile, err := u.userRepo.FindByID(ctx, actionHistory.ProfileID)
+                if err != nil </span><span class="cov0" title="0">{
+                        logger.ErrorWithContext(ctx, err.Error(), lf...)
+                        return nil, err
+                }</span>
+
+                <span class="cov10" title="2">result = append(result, presentations.ActionHistoryResponse{
+                        FirstName: profile.FirstName,
+                        LastName:  profile.LastName,
+                        Age:       profile.Age(),
+                        Action:    actionHistory.Action,
+                        UpdatedAt: actionHistory.UpdatedAt.Format(time.DateTime),
+                })</span>
+        }
+
+        <span class="cov1" title="1">return result, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file8" style="display: none">package usecases
+
+import (
+        "context"
+
+        "github.com/yonisaka/dating-service/internal/entities/repository"
+        "github.com/yonisaka/dating-service/internal/presentations"
+)
+
+// ActionHistoryUsecase is an interface for auth usecase
+type ActionHistoryUsecase interface {
+        GetActionHistories(ctx context.Context) ([]presentations.ActionHistoryResponse, error)
+}
+
+func NewActionHistoryUsecase(
+        userActionHistoryRepo repository.UserActionHistoryRepo,
+        userRepo repository.UserRepo,
+) ActionHistoryUsecase <span class="cov8" title="1">{
+        return &amp;actionHistoryUsecase{
+                userActionHistoryRepo: userActionHistoryRepo,
+                userRepo:              userRepo,
+        }
+}</span>
+
+type actionHistoryUsecase struct {
+        userActionHistoryRepo repository.UserActionHistoryRepo
+        userRepo              repository.UserRepo
+}
+</pre>
+		
+		<pre class="file" id="file9" style="display: none">package usecases
+
+import (
+        "context"
+        "time"
+
+        "github.com/yonisaka/dating-service/internal/entities/repository"
+        "github.com/yonisaka/dating-service/internal/presentations"
+        "github.com/yonisaka/dating-service/pkg/crypto"
+        "github.com/yonisaka/dating-service/pkg/logger"
+)
+
+// Login is a function to login user
+func (u *authUsecase) Login(ctx context.Context, req presentations.LoginRequest) (*presentations.LoginResponse, error) <span class="cov10" title="2">{
+        var (
+                lf = logger.NewFields(
+                        logger.EventName("usecase.auth.login"),
+                )
+                result presentations.LoginResponse
+        )
+
+        user, err := u.userRepo.FindByEmail(ctx, req.Email)
+        if err != nil </span><span class="cov1" title="1">{
+                logger.ErrorWithContext(ctx, err.Error(), lf...)
+                return nil, err
+        }</span>
+
+        <span class="cov1" title="1">ok, err := crypto.CompareHash(user.Password, req.Password)
+        if err != nil </span><span class="cov0" title="0">{
+                logger.ErrorWithContext(ctx, err.Error(), lf...)
+                return nil, err
+        }</span>
+
+        <span class="cov1" title="1">if !ok </span><span class="cov0" title="0">{
+                logger.ErrorWithContext(ctx, err.Error(), lf...)
+                return nil, err
+        }</span>
+
+        <span class="cov1" title="1">userToken := u.authenticator.CreateTokenJWT(user.ID)
+
+        result = presentations.LoginResponse{
+                AccessToken:  userToken.AccessToken,
+                RefreshToken: userToken.RefreshToken,
+                ExpiredAt:    userToken.AtExpires.Format(time.DateTime),
+        }
+
+        return &amp;result, nil</span>
+}
+
+// Register is a function to register user
+func (u *authUsecase) Register(ctx context.Context, req presentations.RegisterRequest) (*presentations.RegisterResponse, error) <span class="cov1" title="1">{
+        var (
+                lf = logger.NewFields(
+                        logger.EventName("usecase.auth.register"),
+                )
+                result presentations.RegisterResponse
+        )
+
+        hashedPassword, err := crypto.Hash(req.Password)
+        if err != nil </span><span class="cov0" title="0">{
+                logger.ErrorWithContext(ctx, err.Error(), lf...)
+                return nil, err
+        }</span>
+
+        <span class="cov1" title="1">dob, err := time.Parse("2006-01-02", req.Dob)
+        if err != nil </span><span class="cov0" title="0">{
+                logger.ErrorWithContext(ctx, err.Error(), lf...)
+                return nil, err
+        }</span>
+
+        <span class="cov1" title="1">err = u.userRepo.Store(ctx, &amp;repository.User{
+                FirstName: req.FirstName,
+                LastName:  req.LastName,
+                Email:     req.Email,
+                Phone:     req.Phone,
+                Password:  hashedPassword,
+                Dob:       &amp;dob,
+                Gender:    req.Gender,
+                Intend:    req.Intend,
+        })
+        if err != nil </span><span class="cov0" title="0">{
+                logger.ErrorWithContext(ctx, err.Error(), lf...)
+                return nil, err
+        }</span>
+
+        <span class="cov1" title="1">user, err := u.userRepo.FindByEmail(ctx, req.Email)
+        if err != nil </span><span class="cov0" title="0">{
+                logger.ErrorWithContext(ctx, err.Error(), lf...)
+                return nil, err
+        }</span>
+
+        <span class="cov1" title="1">result = presentations.RegisterResponse{
+                FirstName: user.FirstName,
+                LastName:  user.LastName,
+                Email:     user.Email,
+                Phone:     user.Phone,
+                Dob:       user.Dob.Format(time.DateTime),
+                Gender:    user.Gender,
+        }
+
+        return &amp;result, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file10" style="display: none">package usecases
+
+import (
+        "context"
+
+        "github.com/yonisaka/dating-service/internal/entities/repository"
+        "github.com/yonisaka/dating-service/internal/presentations"
+        "github.com/yonisaka/dating-service/pkg/auth"
+)
+
+// AuthUsecase is an interface for auth usecase
+type AuthUsecase interface {
+        Login(ctx context.Context, req presentations.LoginRequest) (*presentations.LoginResponse, error)
+        Register(ctx context.Context, req presentations.RegisterRequest) (*presentations.RegisterResponse, error)
+}
+
+func NewAuthUsecase(
+        userRepo repository.UserRepo,
+        authenticator auth.Authenticator,
+) AuthUsecase <span class="cov10" title="3">{
+        return &amp;authUsecase{
+                userRepo:      userRepo,
+                authenticator: authenticator,
+        }
+}</span>
+
+type authUsecase struct {
+        userRepo      repository.UserRepo
+        authenticator auth.Authenticator
+}
+</pre>
+		
+		<pre class="file" id="file11" style="display: none">package usecases
+
+import "context"
+
+// Liveness is a function to check liveness
+func (u *healthUsecase) Liveness(ctx context.Context) (string, error) <span class="cov10" title="2">{
+        err := u.healthRepo.GetLiveness(ctx)
+        if err != nil </span><span class="cov1" title="1">{
+                return "", err
+        }</span>
+
+        <span class="cov1" title="1">return "Life is not about waiting for the storms to pass; " +
+                "it's about learning to dance in the rain and embracing every challenge as an opportunity for growth.", nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file12" style="display: none">package usecases
+
+//go:generate rm -f ./health_uc_mock.go
+//go:generate mockgen -destination health_uc_mock.go -package usecases -mock_names HealthUsecase=GoMockHealthUsecase -source health_uc.go
+
+import (
+        "context"
+
+        "github.com/yonisaka/dating-service/internal/entities/repository"
+)
+
+// HealthUsecase is an interface for health usecase
+type HealthUsecase interface {
+        Liveness(ctx context.Context) (string, error)
+}
+
+// Compile time implementation check
+var _ HealthUsecase = (*healthUsecase)(nil)
+
+// NewHealthUsecase is a constructor function for health usecase
+func NewHealthUsecase(
+        healthRepo repository.HealthRepo,
+) HealthUsecase <span class="cov10" title="2">{
+        return &amp;healthUsecase{
+                healthRepo: healthRepo,
+        }
+}</span>
+
+// healthUsecase is a struct for health usecase
+type healthUsecase struct {
+        healthRepo repository.HealthRepo
+}
+</pre>
+		
+		<pre class="file" id="file13" style="display: none">package usecases
+
+import (
+        "context"
+        "encoding/base64"
+        "fmt"
+        "strings"
+        "time"
+
+        "github.com/google/uuid"
+        "github.com/yonisaka/dating-service/internal/consts"
+        "github.com/yonisaka/dating-service/internal/entities/repository"
+        "github.com/yonisaka/dating-service/internal/helper"
+        "github.com/yonisaka/dating-service/internal/presentations"
+        "github.com/yonisaka/dating-service/pkg/logger"
+        "github.com/yonisaka/dating-service/pkg/util"
+        "golang.org/x/sync/errgroup"
+)
+
+// GetProfile is a function to get profile
+//
+//nolint:funlen
+func (u *profileUsecase) GetProfile(ctx context.Context) (*presentations.ProfileResponse, error) <span class="cov8" title="1">{
+        var (
+                lf = logger.NewFields(
+                        logger.EventName("usecase.profile"),
+                )
+                authInfo     = helper.AuthInfoFromContext(ctx)
+                user         *repository.User
+                subscription *repository.UserSubscription
+                userImages   []repository.UserImage
+        )
+
+        group, _ := errgroup.WithContext(ctx)
+
+        group.Go(func() error </span><span class="cov8" title="1">{
+                result, err := u.userRepo.FindByID(ctx, authInfo.UserID)
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+
+                <span class="cov8" title="1">user = result
+                return nil</span>
+        })
+
+        <span class="cov8" title="1">group.Go(func() error </span><span class="cov8" title="1">{
+                result, err := u.userSubscriptionRepo.FindByUserID(ctx, authInfo.UserID)
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+
+                <span class="cov8" title="1">subscription = result
+                return nil</span>
+        })
+
+        <span class="cov8" title="1">group.Go(func() error </span><span class="cov8" title="1">{
+                result, err := u.userImageRepo.FindByUserID(ctx, authInfo.UserID)
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+
+                <span class="cov8" title="1">userImages = result
+                return nil</span>
+        })
+
+        <span class="cov8" title="1">if err := group.Wait(); err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">result := presentations.ProfileResponse{
+                FirstName: user.FirstName,
+                LastName:  user.LastName,
+                Status:    consts.Member,
+                Email:     user.Email,
+                Phone:     user.Phone,
+                Dob:       user.Dob.Format(time.DateTime),
+                Gender:    user.Gender,
+                Intend:    user.Intend,
+        }
+
+        if subscription != nil </span><span class="cov8" title="1">{
+                result.Status = consts.Verified
+        }</span>
+
+        <span class="cov8" title="1">if len(userImages) &gt; 0 </span><span class="cov8" title="1">{
+                for _, image := range userImages </span><span class="cov8" title="1">{
+                        signedURL, err := u.storage.GetSignedURL(u.cfg.Cloudinary.Bucket, image.ImageURL)
+                        if err != nil </span><span class="cov0" title="0">{
+                                logger.ErrorWithContext(ctx, "error get signed url", lf...)
+                                return nil, err
+                        }</span>
+
+                        <span class="cov8" title="1">result.Images = append(result.Images, signedURL.String())</span>
+                }
+        }
+
+        <span class="cov8" title="1">return &amp;result, nil</span>
+}
+
+// UploadImages is a function to upload images
+func (u *profileUsecase) UploadImages(ctx context.Context, req presentations.UploadImageRequest) error <span class="cov8" title="1">{
+        var (
+                lf = logger.NewFields(
+                        logger.EventName("usecase.upload_images"),
+                )
+                authInfo   = helper.AuthInfoFromContext(ctx)
+                userImages = make([]repository.UserImage, 0)
+        )
+
+        for _, image := range req.Images </span><span class="cov8" title="1">{
+                i := strings.Index(image, ",")
+                if i &lt; 0 </span><span class="cov0" title="0">{
+                        logger.ErrorWithContext(ctx, "invalid image", lf...)
+                        return fmt.Errorf("invalid image")
+                }</span>
+
+                <span class="cov8" title="1">extIndex := strings.Index(image[:i], ";")
+                if extIndex &lt; 0 </span><span class="cov0" title="0">{
+                        logger.ErrorWithContext(ctx, "invalid image", lf...)
+                        return fmt.Errorf("invalid image")
+                }</span>
+
+                <span class="cov8" title="1">mimeType := strings.Split(image[:extIndex], ":")[1]
+                if !util.InArray(mimeType, consts.ExtImageBase64Allowed) </span><span class="cov0" title="0">{
+                        logger.ErrorWithContext(ctx, "invalid image extension", lf...)
+                        return fmt.Errorf("invalid image extension")
+                }</span>
+
+                <span class="cov8" title="1">byteImage, err := base64.StdEncoding.DecodeString(image[i+1:])
+
+                if err != nil </span><span class="cov0" title="0">{
+                        logger.ErrorWithContext(ctx, err.Error(), lf...)
+                        return err
+                }</span>
+
+                <span class="cov8" title="1">filename := uuid.New().String()
+                err = u.storage.Put(ctx, u.cfg.Cloudinary.Bucket, filename, byteImage, false, mimeType)
+
+                if err != nil </span><span class="cov0" title="0">{
+                        logger.ErrorWithContext(ctx, err.Error(), lf...)
+                        return err
+                }</span>
+
+                <span class="cov8" title="1">userImages = append(userImages, repository.UserImage{
+                        UserID:   authInfo.UserID,
+                        ImageURL: filename,
+                })</span>
+        }
+
+        <span class="cov8" title="1">err := u.userImageRepo.StoreBulk(ctx, userImages)
+        if err != nil </span><span class="cov0" title="0">{
+                logger.ErrorWithContext(ctx, err.Error(), lf...)
+                return err
+        }</span>
+
+        <span class="cov8" title="1">return nil</span>
+}
+
+// SetPreference is a function to set preference
+func (u *profileUsecase) SetPreference(ctx context.Context, req presentations.UserPreferenceRequest) error <span class="cov8" title="1">{
+        var (
+                lf = logger.NewFields(
+                        logger.EventName("usecase.set_preference"),
+                )
+                authInfo = helper.AuthInfoFromContext(ctx)
+        )
+
+        err := u.userPreferenceRepo.Update(ctx, repository.UserPreference{
+                UserID:    authInfo.UserID,
+                MinAge:    req.MinAge,
+                MaxAge:    req.MaxAge,
+                UseIntend: req.UseIntend,
+        })
+
+        if err != nil </span><span class="cov0" title="0">{
+                logger.ErrorWithContext(ctx, err.Error(), lf...)
+                return err
+        }</span>
+
+        <span class="cov8" title="1">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file14" style="display: none">package usecases
+
+import (
+        "context"
+
+        "github.com/yonisaka/dating-service/config"
+        "github.com/yonisaka/dating-service/internal/entities/repository"
+        "github.com/yonisaka/dating-service/internal/presentations"
+        "github.com/yonisaka/dating-service/pkg/storage"
+)
+
+// ProfileUsecase is an interface for auth usecase
+type ProfileUsecase interface {
+        GetProfile(ctx context.Context) (*presentations.ProfileResponse, error)
+        UploadImages(ctx context.Context, req presentations.UploadImageRequest) error
+        SetPreference(ctx context.Context, req presentations.UserPreferenceRequest) error
+}
+
+func NewProfileUsecase(
+        cfg *config.Config,
+        userRepo repository.UserRepo,
+        userSubscriptionRepo repository.UserSubscriptionRepo,
+        userImageRepo repository.UserImageRepo,
+        userPreferenceRepo repository.UserPreferenceRepo,
+        storage storage.Storage,
+) ProfileUsecase <span class="cov10" title="3">{
+        return &amp;profileUsecase{
+                cfg:                  cfg,
+                userRepo:             userRepo,
+                userSubscriptionRepo: userSubscriptionRepo,
+                userImageRepo:        userImageRepo,
+                userPreferenceRepo:   userPreferenceRepo,
+                storage:              storage,
+        }
+}</span>
+
+type profileUsecase struct {
+        cfg                  *config.Config
+        userRepo             repository.UserRepo
+        userSubscriptionRepo repository.UserSubscriptionRepo
+        userImageRepo        repository.UserImageRepo
+        userPreferenceRepo   repository.UserPreferenceRepo
+        storage              storage.Storage
+}
+</pre>
+		
+		<pre class="file" id="file15" style="display: none">package usecases
+
+import (
+        "context"
+        "encoding/json"
+        "fmt"
+        "time"
+
+        "github.com/yonisaka/dating-service/internal/entities/repository"
+        "github.com/yonisaka/dating-service/internal/helper"
+        "github.com/yonisaka/dating-service/internal/presentations"
+        "github.com/yonisaka/dating-service/pkg/logger"
+        "github.com/yonisaka/dating-service/pkg/util"
+        "golang.org/x/sync/errgroup"
+)
+
+// GetQueryProfile QueryProfileUsecase is an interface for auth usecase
+//
+//nolint:all
+func (u *queryProfileUsecase) GetQueryProfile(
+        ctx context.Context,
+        req presentations.QueryProfileRequest,
+) (*presentations.QueryProfileResponse, error) <span class="cov8" title="1">{
+        var (
+                lf = logger.NewFields(
+                        logger.EventName("usecase.query.profile"),
+                )
+                intend           = make(chan string)
+                userPreference   repository.UserPreference
+                userSubscription *repository.UserSubscription
+                authInfo         = helper.AuthInfoFromContext(ctx)
+                keyUserQuery     = fmt.Sprintf("user:query:%d", authInfo.UserID)
+                keyRecentQuery   = fmt.Sprintf("user:recent:query:%d", authInfo.UserID)
+                result           *presentations.QueryProfileResponse
+        )
+
+        existUserIDs := make([]int64, 0)
+        group, _ := errgroup.WithContext(ctx)
+
+        group.Go(func() error </span><span class="cov8" title="1">{
+                result, err := u.userRepo.FindByID(ctx, authInfo.UserID)
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+
+                <span class="cov8" title="1">intend &lt;- result.Intend
+
+                userPreference.Gender = result.OppositeGender()
+
+                return nil</span>
+        })
+
+        <span class="cov8" title="1">group.Go(func() error </span><span class="cov8" title="1">{
+                result, err := u.userPreferenceRepo.FindByUserID(ctx, authInfo.UserID)
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+
+                <span class="cov8" title="1">if result != nil </span><span class="cov8" title="1">{
+                        userPreference = *result
+                        userPreference.Intend = &lt;-intend
+                }</span>
+
+                <span class="cov8" title="1">return nil</span>
+        })
+
+        <span class="cov8" title="1">group.Go(func() error </span><span class="cov8" title="1">{
+                result, err := u.userSubscriptionRepo.FindByUserID(ctx, authInfo.UserID)
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+
+                <span class="cov8" title="1">userSubscription = result
+                return nil</span>
+        })
+
+        <span class="cov8" title="1">err := group.Wait()
+        if err != nil </span><span class="cov0" title="0">{
+                logger.ErrorWithContext(ctx, err.Error(), lf...)
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">recentQuery, err := u.kvs.Get(ctx, keyRecentQuery)
+        if err != nil </span><span class="cov0" title="0">{
+                logger.ErrorWithContext(ctx, err.Error(), lf...)
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">if recentQuery != nil </span><span class="cov0" title="0">{
+                var recentQueryUserID int64
+                err = json.Unmarshal([]byte(recentQuery.(string)), &amp;recentQueryUserID)
+
+                if err != nil </span><span class="cov0" title="0">{
+                        logger.ErrorWithContext(ctx, err.Error(), lf...)
+                        return nil, err
+                }</span>
+
+                <span class="cov0" title="0">if req.Action == "" </span><span class="cov0" title="0">{
+                        return nil, fmt.Errorf("you need to specify action")
+                }</span>
+
+                <span class="cov0" title="0">err = u.userActionHistoryRepo.Store(ctx, repository.UserActionHistory{
+                        UserID:    authInfo.UserID,
+                        ProfileID: recentQueryUserID,
+                        Action:    req.Action,
+                })
+
+                if err != nil </span><span class="cov0" title="0">{
+                        logger.ErrorWithContext(ctx, err.Error(), lf...)
+                        return nil, err
+                }</span>
+        }
+
+        <span class="cov8" title="1">existQuery, err := u.kvs.Get(ctx, keyUserQuery)
+
+        if err != nil </span><span class="cov0" title="0">{
+                logger.ErrorWithContext(ctx, err.Error(), lf...)
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">if existQuery != nil </span><span class="cov0" title="0">{
+                err = json.Unmarshal([]byte(existQuery.(string)), &amp;existUserIDs)
+                if err != nil </span><span class="cov0" title="0">{
+                        logger.ErrorWithContext(ctx, err.Error(), lf...)
+                        return nil, err
+                }</span>
+
+                <span class="cov0" title="0">if len(existUserIDs) &gt; 10 &amp;&amp; userSubscription == nil </span><span class="cov0" title="0">{
+                        return nil, fmt.Errorf("query profile is limited to 10 users, subscribe to premium to get more")
+                }</span>
+        }
+
+        <span class="cov8" title="1">users, err := u.userRepo.Find(ctx, userPreference)
+        if err != nil </span><span class="cov0" title="0">{
+                logger.ErrorWithContext(ctx, err.Error(), lf...)
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">for _, user := range users </span><span class="cov8" title="1">{
+                if len(existUserIDs) &gt; 0 </span><span class="cov0" title="0">{
+                        if util.InArray(user.ID, existUserIDs) </span><span class="cov0" title="0">{
+                                continue</span>
+                        }
+                }
+
+                <span class="cov8" title="1">existUserIDs = append(existUserIDs, user.ID)
+
+                byteExistUserIDs, err := json.Marshal(existUserIDs)
+
+                if err != nil </span><span class="cov0" title="0">{
+                        logger.ErrorWithContext(ctx, err.Error(), lf...)
+                        return nil, err
+                }</span>
+
+                <span class="cov8" title="1">_, err = u.kvs.Set(ctx, keyUserQuery, byteExistUserIDs, time.Duration(24)*time.Hour)
+
+                if err != nil </span><span class="cov0" title="0">{
+                        logger.ErrorWithContext(ctx, err.Error(), lf...)
+                        return nil, err
+                }</span>
+
+                <span class="cov8" title="1">byteUserID, err := json.Marshal(user.ID)
+
+                if err != nil </span><span class="cov0" title="0">{
+                        logger.ErrorWithContext(ctx, err.Error(), lf...)
+                        return nil, err
+                }</span>
+
+                <span class="cov8" title="1">_, err = u.kvs.Set(ctx, keyRecentQuery, byteUserID, time.Duration(24)*time.Hour)
+
+                if err != nil </span><span class="cov0" title="0">{
+                        logger.ErrorWithContext(ctx, err.Error(), lf...)
+                        return nil, err
+                }</span>
+
+                <span class="cov8" title="1">profileImages, err := u.userImageRepo.FindByUserID(ctx, user.ID)
+                if err != nil </span><span class="cov0" title="0">{
+                        logger.ErrorWithContext(ctx, err.Error(), lf...)
+                        return nil, err
+                }</span>
+
+                <span class="cov8" title="1">result = &amp;presentations.QueryProfileResponse{
+                        FirstName: user.FirstName,
+                        LastName:  user.LastName,
+                        Age:       user.Age(),
+                        Gender:    user.Gender,
+                        Intend:    user.Intend,
+                }
+
+                if len(profileImages) &gt; 0 </span><span class="cov8" title="1">{
+                        for _, image := range profileImages </span><span class="cov8" title="1">{
+                                signedURL, err := u.storage.GetSignedURL(u.cfg.Cloudinary.Bucket, image.ImageURL)
+                                if err != nil </span><span class="cov0" title="0">{
+                                        logger.ErrorWithContext(ctx, "error get signed url", lf...)
+                                        return nil, err
+                                }</span>
+
+                                <span class="cov8" title="1">result.Images = append(result.Images, signedURL.String())</span>
+                        }
+                }
+
+                <span class="cov8" title="1">break</span>
+        }
+
+        <span class="cov8" title="1">if result == nil </span><span class="cov0" title="0">{
+                return nil, fmt.Errorf("no more user match with your preference")
+        }</span>
+
+        <span class="cov8" title="1">return result, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file16" style="display: none">package usecases
+
+import (
+        "context"
+
+        "github.com/yonisaka/dating-service/config"
+        "github.com/yonisaka/dating-service/internal/entities/repository"
+        "github.com/yonisaka/dating-service/internal/presentations"
+        "github.com/yonisaka/dating-service/pkg/kvs"
+        "github.com/yonisaka/dating-service/pkg/storage"
+)
+
+// QueryProfileUsecase is an interface for auth usecase
+type QueryProfileUsecase interface {
+        GetQueryProfile(ctx context.Context, req presentations.QueryProfileRequest) (*presentations.QueryProfileResponse, error)
+}
+
+func NewQueryProfileUsecase(
+        cfg *config.Config,
+        userRepo repository.UserRepo,
+        userPreferenceRepo repository.UserPreferenceRepo,
+        userSubscriptionRepo repository.UserSubscriptionRepo,
+        userActionHistoryRepo repository.UserActionHistoryRepo,
+        userImageRepo repository.UserImageRepo,
+        kvs kvs.Client,
+        storage storage.Storage,
+) QueryProfileUsecase <span class="cov8" title="1">{
+        return &amp;queryProfileUsecase{
+                cfg:                   cfg,
+                userRepo:              userRepo,
+                userPreferenceRepo:    userPreferenceRepo,
+                userSubscriptionRepo:  userSubscriptionRepo,
+                userActionHistoryRepo: userActionHistoryRepo,
+                userImageRepo:         userImageRepo,
+                kvs:                   kvs,
+                storage:               storage,
+        }
+}</span>
+
+type queryProfileUsecase struct {
+        cfg                   *config.Config
+        userRepo              repository.UserRepo
+        userPreferenceRepo    repository.UserPreferenceRepo
+        userSubscriptionRepo  repository.UserSubscriptionRepo
+        userActionHistoryRepo repository.UserActionHistoryRepo
+        userImageRepo         repository.UserImageRepo
+        kvs                   kvs.Client
+        storage               storage.Storage
+}
+</pre>
+		
+		<pre class="file" id="file17" style="display: none">package usecases
+
+import (
+        "context"
+        "time"
+
+        "github.com/google/uuid"
+        "github.com/yonisaka/dating-service/internal/entities/repository"
+        "github.com/yonisaka/dating-service/internal/helper"
+        "github.com/yonisaka/dating-service/internal/presentations"
+        "github.com/yonisaka/dating-service/pkg/logger"
+)
+
+func (u *subscribeUsecase) Subscribe(ctx context.Context) (*presentations.SubscribeResponse, error) <span class="cov8" title="1">{
+        var (
+                lf = logger.NewFields(
+                        logger.EventName("usecase.profile"),
+                )
+                authInfo = helper.AuthInfoFromContext(ctx)
+        )
+
+        user, err := u.userRepo.FindByID(ctx, authInfo.UserID)
+        if err != nil </span><span class="cov0" title="0">{
+                logger.ErrorWithContext(ctx, err.Error(), lf...)
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">subscriptionCode := uuid.New().String()
+        subscriptionExpiredAt := time.Now().AddDate(0, 1, 0)
+        err = u.userSubscriptionRepo.Store(ctx, repository.UserSubscription{
+                UserID:           user.ID,
+                SubscriptionCode: subscriptionCode,
+                ExpiredAt:        &amp;subscriptionExpiredAt,
+        })
+
+        if err != nil </span><span class="cov0" title="0">{
+                logger.ErrorWithContext(ctx, err.Error(), lf...)
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">result := presentations.SubscribeResponse{
+                SubscriptionCode: subscriptionCode,
+                ExpiredAt:        subscriptionExpiredAt.Format(time.DateTime),
+        }
+
+        return &amp;result, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file18" style="display: none">package usecases
+
+import (
+        "context"
+
+        "github.com/yonisaka/dating-service/internal/entities/repository"
+        "github.com/yonisaka/dating-service/internal/presentations"
+)
+
+// SubscribeUsecase is an interface for auth usecase
+type SubscribeUsecase interface {
+        Subscribe(ctx context.Context) (*presentations.SubscribeResponse, error)
+}
+
+func NewSubscribeUsecase(
+        userRepo repository.UserRepo,
+        userSubscriptionRepo repository.UserSubscriptionRepo,
+) SubscribeUsecase <span class="cov8" title="1">{
+        return &amp;subscribeUsecase{
+                userRepo:             userRepo,
+                userSubscriptionRepo: userSubscriptionRepo,
+        }
+}</span>
+
+type subscribeUsecase struct {
+        userRepo             repository.UserRepo
+        userSubscriptionRepo repository.UserSubscriptionRepo
+}
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>

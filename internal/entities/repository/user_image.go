@@ -2,6 +2,9 @@ package repository
 
 import "context"
 
+//go:generate rm -f ./user_image_mock.go
+//go:generate mockgen -destination user_image_mock.go -package repository -mock_names UserImageRepo=GoMockUserImageRepo -source user_image.go
+
 // UserImage is a user image entity.
 type UserImage struct {
 	ID       int64

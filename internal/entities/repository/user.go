@@ -7,6 +7,9 @@ import (
 	"github.com/yonisaka/dating-service/internal/consts"
 )
 
+//go:generate rm -f ./user_mock.go
+//go:generate mockgen -destination user_mock.go -package repository -mock_names UserRepo=GoMockUserRepo -source user.go
+
 // User is a user entity.
 type User struct {
 	ID        int64
@@ -41,7 +44,7 @@ func (u *User) OppositeGender() string {
 
 // UserRepo is a user repository interface.
 type UserRepo interface {
-	Find(ctx context.Context, preferences ...UserPreference) ([]*User, error)
+	Find(ctx context.Context, preferences ...UserPreference) ([]User, error)
 	FindByID(ctx context.Context, id int64) (*User, error)
 	FindByEmail(ctx context.Context, email string) (*User, error)
 	Store(ctx context.Context, user *User) error

@@ -5,6 +5,9 @@ import (
 	"time"
 )
 
+//go:generate rm -f ./user_action_history_mock.go
+//go:generate mockgen -destination user_action_history_mock.go -package repository -mock_names UserActionHistoryRepo=GoMockUserActionHistoryRepo -source user_action_history.go
+
 // UserActionHistory is a user action history entity.
 type UserActionHistory struct {
 	ID        int64
