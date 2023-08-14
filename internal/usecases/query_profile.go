@@ -25,7 +25,6 @@ func (u *queryProfileUsecase) GetQueryProfile(
 		lf = logger.NewFields(
 			logger.EventName("usecase.query.profile"),
 		)
-		intend           = make(chan string)
 		userPreference   repository.UserPreference
 		userSubscription *repository.UserSubscription
 		authInfo         = helper.AuthInfoFromContext(ctx)
@@ -43,9 +42,8 @@ func (u *queryProfileUsecase) GetQueryProfile(
 			return err
 		}
 
-		intend <- result.Intend
-
 		userPreference.Gender = result.OppositeGender()
+		userPreference.Intend = result.Intend
 
 		return nil
 	})
@@ -56,10 +54,11 @@ func (u *queryProfileUsecase) GetQueryProfile(
 			return err
 		}
 
-		if result != nil {
-			userPreference = *result
-			userPreference.Intend = <-intend
+		if result == nil {
+			return fmt.Errorf("please set your preference first")
 		}
+
+		userPreference = *result
 
 		return nil
 	})
@@ -80,6 +79,7 @@ func (u *queryProfileUsecase) GetQueryProfile(
 		return nil, err
 	}
 
+	fmt.Println(userPreference)
 	recentQuery, err := u.kvs.Get(ctx, keyRecentQuery)
 	if err != nil {
 		logger.ErrorWithContext(ctx, err.Error(), lf...)
