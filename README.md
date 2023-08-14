@@ -85,8 +85,6 @@ This project follow https://github.com/golang-standards/project-layout
 
 However, for have a clear direction when working in this project, here are some small guide about each directory:
 
-* [api](api): contains Protobuf files, generated protobuf, swagger, etc.
-* [build](build): Docker file for the service, migration, etc.
 * [cmd](cmd): main Go file for running the service, producer, consumer, etc.
 * [config](config): configuration file for the service.
 * [database](database): database migration files.
