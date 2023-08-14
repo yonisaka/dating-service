@@ -80,6 +80,10 @@ $ make test
 $ make lint
 ```
 
+## Postman Collection
+
+You can import postman collection from **_docs/dealls.postman_collection.json_**
+
 ## Project Structure
 
 This project follow https://github.com/golang-standards/project-layout
