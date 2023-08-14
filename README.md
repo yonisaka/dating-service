@@ -79,7 +79,36 @@ $ make test
 $ make lint
 ```
 
-### This project has GitHub Actions CI to do some automation such as:
+## Project Structure
+
+This project follow https://github.com/golang-standards/project-layout
+
+However, for have a clear direction when working in this project, here are some small guide about each directory:
+
+* [api](api): contains Protobuf files, generated protobuf, swagger, etc.
+* [build](build): Docker file for the service, migration, etc.
+* [cmd](cmd): main Go file for running the service, producer, consumer, etc.
+* [config](config): configuration file for the service.
+* [database](database): database migration files.
+* [development](development): file to support development like docker-compose.
+* [docs](docs): file about project documentations such as diagram, sequence diagram, etc.
+* [internal](internal): internal code that can't be shared.
+    * [internal/adapters/httphandler](internal/adapters/httphandler): adapter layer that serve into gRPC service.
+    * [internal/di](internal/di): dependencies injection for connecting each layer.
+    * [internal/middleware](internal/middleware): middleware for HTTP server.
+    * [internal/consts](internal/consts): constant value that can be shared.
+    * [internal/presentations](internal/presentations): presentation that struct for request and response.
+    * [internal/infrastructure](internal/infrastructure): infrastructure layer that connect to database, object storage, etc.
+    * [internal/entities](internal/entities): entity layer that struct for database table.
+    * [internal/usecases](internal/usecases): business logic that connect to repository layer, HTTP client, etc.
+* [pkg](pkg): package code that can be shared.
+* [scripts](scripts): shell script, go script to help build or testing something.
+
+## GitHub Actions CI
+
+<img src="https://github.com/yonisaka/dating-service/blob/main/docs/ci.jpg?raw=true"/>
+
+This project has GitHub Actions CI to do some automation such as:
 
 * [lint](.github/workflows/lint.yml): check the code style.
 * [test](.github/workflows/test.yml): run unit testing and uploaded code coverage artifact.
