@@ -27,7 +27,7 @@ func (h *actionHistoryHandler) Handle(req *http.Request) dto.HTTPResponse {
 	var (
 		ctx = req.Context()
 		lf  = logger.NewFields(
-			logger.EventName("handler.profile"),
+			logger.EventName("handler.action.history"),
 		)
 	)
 

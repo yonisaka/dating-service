@@ -2,6 +2,7 @@ package usecases
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/yonisaka/dating-service/internal/entities/repository"
@@ -55,6 +56,17 @@ func (u *authUsecase) Register(ctx context.Context, req presentations.RegisterRe
 		)
 		result presentations.RegisterResponse
 	)
+
+	existUser, err := u.userRepo.FindByEmail(ctx, req.Email)
+	if err != nil {
+		logger.ErrorWithContext(ctx, err.Error(), lf...)
+		return nil, err
+	}
+
+	if existUser != nil {
+		logger.ErrorWithContext(ctx, "email already exist", lf...)
+		return nil, fmt.Errorf("email already exist")
+	}
 
 	hashedPassword, err := crypto.Hash(req.Password)
 	if err != nil {
