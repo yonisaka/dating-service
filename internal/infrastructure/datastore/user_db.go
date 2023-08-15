@@ -120,7 +120,7 @@ func (r *userRepo) findOne(ctx context.Context, query string, param any) (*repos
 	)
 
 	if err == pgx.ErrNoRows {
-		return nil, fmt.Errorf("user not found")
+		return nil, nil
 	}
 
 	if err != nil {

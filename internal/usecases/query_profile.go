@@ -58,7 +58,9 @@ func (u *queryProfileUsecase) GetQueryProfile(
 			return fmt.Errorf("please set your preference first")
 		}
 
-		userPreference = *result
+		userPreference.MinAge = result.MinAge
+		userPreference.MaxAge = result.MaxAge
+		userPreference.UseIntend = result.UseIntend
 
 		return nil
 	})
